@@ -4,6 +4,13 @@ All notable changes to this project are documented here.
 
 ---
 
+## [Unreleased]
+
+### Added
+- **Curly quotation marks (“ ” ‘ ’)** — flagged under Formatting. ChatGPT and several other chat UIs emit Unicode curly quotes (U+201C / U+201D / U+2018 / U+2019) by default; their unexplained presence in otherwise plain-ASCII text is a strong copy-paste-from-chat signal. Carve-outs for deliberate publication typography and locale-correct punctuation (French guillemets, German low-9 quotes).
+
+---
+
 ## [3.4.0] — 2026-05-16
 
 ### Added
