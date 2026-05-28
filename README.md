@@ -245,18 +245,6 @@ Added in v3.4 to catch LLM output that sidesteps the vocabulary tables by substi
 
 That's 35+ AI tells.
 
-## $avoid token + web app
-
-The community created a Solana token around this project. You can burn $avoid tokens to run the audit skill through a web app:
-
-**[avoid-ai-writing-app.vercel.app](https://avoid-ai-writing-app.vercel.app)** — paste text, burn 1,000 $avoid, get a full audit + rewrite. Every token burned is permanently removed from circulation.
-
-| | |
-|---|---|
-| Web App | [avoid-ai-writing-app.vercel.app](https://avoid-ai-writing-app.vercel.app) |
-| DexScreener | [dexscreener.com/solana/4b5m...](https://dexscreener.com/solana/4b5mprekzapcwybrsbbaiewtk4amck62rpcznjcxz69m) |
-| CA | `BsidWuYJnayqMXVsLGr34524vmZ1BrWFhPer3198pump` |
-
 ## Credits
 
 Pattern research informed by:
@@ -265,6 +253,8 @@ Pattern research informed by:
 - [blader/humanizer](https://github.com/blader/humanizer) Claude Code skill
 - [brandonwise/humanizer](https://github.com/brandonwise/humanizer) — tiered vocabulary system, statistical analysis research (burstiness, sentence length variation, trigram repetition), and rewrite philosophy
 - [OpenClaw](https://github.com/openclaw/openclaw) humanizer skill ecosystem — community patterns and vocabulary research
+
+A community built a Solana token (`$avoid`) and a [token-burn web app](https://avoid-ai-writing-app.vercel.app) around this project in 2026; both are now in maintenance mode.
 
 Authored by [Conor Bronsdon](https://github.com/conorbronsdon) · [LinkedIn](https://www.linkedin.com/in/conorbronsdon/) · [Chain of Thought podcast](https://chainofthought.show)
 
