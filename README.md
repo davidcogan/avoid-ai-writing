@@ -279,6 +279,12 @@ A community built a Solana token (`$avoid`) and a [token-burn web app](https://a
 
 Authored by [Conor Bronsdon](https://github.com/conorbronsdon) · [LinkedIn](https://www.linkedin.com/in/conorbronsdon/) · [Chain of Thought podcast](https://chainofthought.show)
 
+## Community / Multilingual
+
+- **[avoid-ai-writing-multilingual](https://github.com/jurigis/avoid-ai-writing-multilingual)** by [Jürgen Kraus](https://github.com/jurigis) — German (`SKILL-DE.md`) and Romanian (`SKILL-RO.md`) adaptations, grounded in native-language research rather than translated from English. French and Spanish planned.
+
+Built something on top of this skill? Open an issue — happy to link it here.
+
 ---
 
 ## Disclaimer
