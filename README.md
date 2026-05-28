@@ -73,6 +73,13 @@ Read and follow the instructions in ~/.claude/skills/avoid-ai-writing/SKILL.md
 
 Then use `/clean-ai-writing <your text>` in Claude Code.
 
+### Claude Cowork
+
+[Cowork](https://www.anthropic.com/cowork) discovers skills only from **installed plugins** — it doesn't scan `~/.claude/skills/`, so cloning there (the Claude Code step above) won't surface the skill in a Cowork session. Two paths work:
+
+- **One-off (manual reference).** Copy `SKILL.md` into a folder connected to your Cowork session, then tell the agent to follow `./SKILL.md`. No auto-trigger.
+- **Auto-trigger (wrap as a plugin).** Package `SKILL.md` into a plugin using Cowork's built-in plugin-creation tool (the "Plugin Create" plugin). Once installed, the skill fires from phrases like "remove AI-isms," same as in Claude Code.
+
 ### OpenClaw
 
 **Option 1: [Install from ClawHub](https://clawhub.ai/conorbronsdon/avoid-ai-writing)**
