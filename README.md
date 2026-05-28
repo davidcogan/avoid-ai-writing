@@ -118,6 +118,38 @@ curl -o .cursor/rules/avoid-ai-writing.mdc \
 
 See [`cursor-rules/README.md`](./cursor-rules/README.md) for activation globs and trigger phrases. Functionally identical to the Claude Code skill — same tier vocabulary, same context profiles, same modes.
 
+### Hermes
+
+Drop the skill into Hermes's skills directory — it then appears automatically as `/avoid-ai-writing`, no registration needed:
+
+```bash
+mkdir -p ~/.hermes/skills/writing/avoid-ai-writing
+curl -o ~/.hermes/skills/writing/avoid-ai-writing/SKILL.md \
+  https://raw.githubusercontent.com/conorbronsdon/avoid-ai-writing/main/SKILL.md
+```
+
+### OpenAI Codex
+
+Codex reads [Agent Skills](https://developers.openai.com/codex/skills) in the same `SKILL.md` format. Put it in `.agents/skills/` at the repo root, or `~/.agents/skills/` to use it across all your projects:
+
+```bash
+mkdir -p .agents/skills/avoid-ai-writing
+curl -o .agents/skills/avoid-ai-writing/SKILL.md \
+  https://raw.githubusercontent.com/conorbronsdon/avoid-ai-writing/main/SKILL.md
+```
+
+### Other agents
+
+The same `SKILL.md` (or the Cursor `.mdc` port) drops into most tools' rules/skills location:
+
+| Tool | Where to put it |
+|------|-----------------|
+| **Windsurf** | `.windsurf/rules/avoid-ai-writing.md` |
+| **Cline** | `.clinerules/avoid-ai-writing.md` |
+| **GitHub Copilot** (VS Code) | paste into `.github/copilot-instructions.md` |
+| **Claude.ai Projects** | paste `SKILL.md` into the project's custom instructions |
+| **ChatGPT Custom GPTs** | paste `SKILL.md` into the GPT's Instructions field |
+
 ### Triggering the skill
 
 Once installed, ask your assistant to clean up AI writing:
