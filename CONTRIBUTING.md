@@ -8,23 +8,27 @@ keep the project coherent.
 
 | Path | What it holds |
 |------|---------------|
-| `SKILL.md` | The human-readable catalog of rules. The source of truth for what counts as an AI tell. |
+| `SKILL.md` | Public contract, safety gates, modes, workflow, and output format. |
+| `references/PATTERN-CATALOG.md` | Human-readable surface catalog and severity guide. |
+| `references/PROFILES.md` | Context and voice profiles. |
+| `references/STRUCTURAL-AUDIT.md` | Permissioned document-level checks. |
 | `detector/patterns.js` | The deterministic engine — the executable subset of the rules. |
-| `detector/CATEGORIES.md` | The map between SKILL.md rules and detector `type`s. Keep it current. |
-| `README.md` | The pitch and the numbered prose-pattern list. |
-| `cursor-rules/`, `plugins/` | Editor and tool integrations. |
+| `detector/CATEGORIES.md` | The map between catalog rules and detector `type`s. Keep it current. |
+| `contracts/` | Public interface and surface-category inventories. |
+| `tests/` | Package, compatibility, and genre-gate fixtures. |
+| `dist/`, `cursor-rules/`, `plugins/` | Generated distributions. |
 
 ## Adding or changing a rule
 
 First decide which kind of rule it is:
 
 - **Regex-detectable** (a phrase, a character, a structural shape) → add it to
-  `SKILL.md`, add the detection to `detector/patterns.js` with a new `type`, and
-  add a row to `detector/CATEGORIES.md`. Cover it with a fixture in
+  `references/PATTERN-CATALOG.md`, add the detection to `detector/patterns.js`
+  with a new `type`, and add a row to `detector/CATEGORIES.md`. Cover it with a fixture in
   `detector/patterns.test.js` (both a true positive and a case that must *not*
   fire).
 - **Judgment-only** (needs reading for meaning — tone, structure, name-dropping)
-  → add it to `SKILL.md` prose and list it under "Skill-only" in
+  → add it to the appropriate reference and list it under "Skill-only" in
   `detector/CATEGORIES.md`. There is no detector type for these.
 
 If you are unsure which it is, open an issue first and we will sort it out.
@@ -49,12 +53,14 @@ an asserted one can't. Put the links in the PR description or inline in the rule
 ## Run the tests
 
 ```bash
+npm run build
 npm test
 ```
 
-This runs the engine fixtures and the `CATEGORIES.md` contract check (every
-detector `type` must be documented, and every documented type must be real). Both
-must pass. No dependencies to install; Node 18+ only.
+The build command refreshes generated distributions. The test command runs
+detector fixtures, category mapping, public-contract checks, package parity,
+genre-gate coverage, and generated-file checks. No dependencies to install;
+Node 18+ only.
 
 ## Write clean prose
 
@@ -67,5 +73,6 @@ its own.
 ## Changelog and versioning
 
 Add an entry to `CHANGELOG.md` under a dated, versioned heading
-(`## [X.Y.Z] — YYYY-MM-DD`), matching the existing entries. A new rule is a minor
-version bump; update the `version:` field in the `SKILL.md` frontmatter to match.
+(`## [X.Y.Z] - YYYY-MM-DD`), matching the existing entries. Update the version
+in `SKILL.md`, `contracts/public-contract.json`, `contracts/surface-categories.json`,
+`package.json`, and the plugin manifest, then regenerate distributions.

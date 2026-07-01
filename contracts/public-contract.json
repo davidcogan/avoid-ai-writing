@@ -1,0 +1,49 @@
+{
+  "name": "avoid-ai-writing",
+  "version": "4.0.0",
+  "defaultMode": "rewrite",
+  "defaultDepth": "surface",
+  "modes": ["rewrite", "detect", "edit"],
+  "legacyContexts": [
+    "linkedin",
+    "blog",
+    "technical-blog",
+    "investor-email",
+    "docs",
+    "casual"
+  ],
+  "addedContexts": [
+    "email",
+    "slides",
+    "research",
+    "fiction",
+    "narrative-nonfiction"
+  ],
+  "voices": ["casual", "professional", "technical", "warm", "blunt"],
+  "legacyFlags": ["--mode", "--voice", "--context", "--file", "--iterate"],
+  "addedFlags": ["--depth"],
+  "outputs": {
+    "rewrite": [
+      "1. Issues found",
+      "2. Rewritten version",
+      "3. What changed",
+      "4. Second-pass audit"
+    ],
+    "detect": ["1. Issues found", "2. Assessment"],
+    "edit": ["1. Edits made", "2. Verification"]
+  },
+  "protectedMaterial": [
+    "quotations",
+    "code blocks",
+    "attributed text",
+    "facts",
+    "numbers",
+    "dates",
+    "links",
+    "citations",
+    "technical identifiers",
+    "negation",
+    "modality",
+    "scope"
+  ]
+}

@@ -4,6 +4,32 @@ All notable changes to this project are documented here.
 
 ---
 
+## [4.0.0] — 2026-07-01
+
+### Added
+- **Permissioned structural audit** — content-only outline plus checks for redundant interpretation, causal compression, material uncertainty, recontextualization, closure honesty, embodiment stacks, external anchors, reader modeling, and batch-level structural repetition.
+- **Genre protections** — additive `email`, `slides`, `research`, `fiction`, and `narrative-nonfiction` contexts. Structural checks are gated away from short copy, ordinary email, slides, and modular docs unless requested.
+- **Preservation contract** — explicit fact, source, quotation, citation, code, identifier, modality, negation, and scope verification. Missing evidence now yields `source or author input needed`, never an invented replacement.
+- **Structural consent** — `--depth structural` is additive; global changes to order, chronology, thesis, evidence, point of view, or ending require approval.
+- **Progressive disclosure** — the runtime skill is split into a concise `SKILL.md` and three directly linked references.
+- **Package contracts and tests** — machine-readable public-interface and surface-category contracts, genre-gate fixtures, reference validation, plugin parity, generated-distribution checks, and damaged-character rejection.
+- **Generated distributions** — a standalone single-file skill and flattened Cursor rule are built from canonical modular sources.
+- **Optimized user runtime** — surface rules and profiles are embedded into one smaller default payload; the structural module remains an on-demand reference.
+- **Safe detector fields** — `pattern_load`, `pattern_load_weights`, a null `authorship_assessment`, and an explicit classification warning. Legacy v2 authorship-named fields remain deprecated aliases for compatibility.
+
+### Changed
+- Reframed pattern thresholds as context-dependent review heuristics rather than universal authorship evidence.
+- Replaced overconfident claims about structure, vocabulary frequency, TTR, two-pass convergence, and detector certainty with scoped editorial guidance.
+- Severity now reflects reader and publishing risk rather than confidence about AI authorship.
+- Voice/context precedence now protects facts and explicit user intent before generic strictness.
+- Plugin synchronization now includes all reference files.
+- Direct-install documentation now uses the standalone distribution, preventing duplicate discovery from cloning the complete source repository into a skills directory.
+
+### Research
+- Structural checks were informed by Russell et al., *StoryScope: Investigating idiosyncrasies in AI fiction* (arXiv:2604.03136v4, 2026). The skill documents the study's fiction-only scope, benchmark construction, and limits on transfer.
+
+---
+
 ## [3.8.0] — 2026-05-29
 
 ### Added

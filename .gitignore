@@ -17,3 +17,17 @@ Desktop.ini
 
 # Local git worktrees (parallel Claude Code sessions)
 .worktrees/
+
+# Local evaluation and rollout artifacts
+evaluation/ACCEPTANCE-REVIEW.md
+evaluation/POST-INSTALL-VERIFICATION.md
+evaluation/final-snapshot.json
+evaluation/final-snapshot-verdict.md
+evaluation/source-origin-note.md
+evaluation/round-1-findings.md
+evaluation/anonymize-runs.mjs
+evaluation/blind/
+evaluation/judgments/
+evaluation/post-install/
+evaluation/runs/
+evaluation/stability/

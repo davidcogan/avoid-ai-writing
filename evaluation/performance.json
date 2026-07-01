@@ -1,0 +1,30 @@
+{
+  "capturedAt": "2026-07-01T15:40:38.586Z",
+  "contextPayload": {
+    "currentV3Bytes": 58508,
+    "candidateDefaultSurfaceBytes": 42197,
+    "candidateStructuralReferenceBytes": 10934,
+    "candidateStructuralTotalBytes": 53131,
+    "defaultSurfaceChangePercent": -27.87823887331647,
+    "explicitStructuralChangePercent": -9.190196212483762,
+    "approximateTokens": {
+      "method": "UTF-8 bytes divided by 4; directional estimate only",
+      "currentV3": 14627,
+      "candidateDefaultSurface": 10549,
+      "candidateWithStructural": 13283
+    }
+  },
+  "detector": {
+    "sampleWords": 64,
+    "iterationsPerRound": 1000,
+    "rounds": 7,
+    "currentV3MedianMs": 45.688333,
+    "candidateV4MedianMs": 45.684292,
+    "changePercent": -0.008844708779374483,
+    "note": "Local microbenchmark only. End-to-end model latency depends on provider, load, and output length."
+  },
+  "runtimeLoading": {
+    "defaultSurface": "one SKILL.md payload; no reference-file read required",
+    "explicitStructural": "one additional local STRUCTURAL-AUDIT.md read"
+  }
+}

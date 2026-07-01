@@ -1,7 +1,15 @@
 ---
-description: Audit and rewrite prose to remove AI-writing patterns while preserving facts, intent, voice, and genre conventions. Supports detect, rewrite, edit-in-place, context and voice profiles, plus a permissioned structural audit. Cursor port of avoid-ai-writing v4.0.0.
-globs: ["**/*.md", "**/*.mdx", "**/*.txt", "**/*.rst", "**/*.adoc"]
-alwaysApply: false
+name: avoid-ai-writing
+description: Audit and rewrite content to remove AI writing patterns ("AI-isms") while preserving facts, intent, voice, and genre conventions. Use when asked to remove AI-isms, clean up AI writing, audit writing for AI tells, make text sound less like AI, or perform a deeper structural writing audit. Supports detect-only, rewrite, and edit-in-place modes; context and voice profiles; and an optional permissioned structural pass.
+version: 4.0.0
+license: MIT
+compatibility: Any AI coding assistant that supports agentskills.io SKILL.md format (Claude Code, Cursor, VS Code Copilot, Hermes Agent, OpenHands, etc.) or OpenClaw. No external tools or APIs required.
+metadata:
+  author: Conor Bronsdon
+  tags: writing editing voice quality
+  agentskills_spec: "1.0"
+  openclaw:
+    emoji: "\u270D\uFE0F"
 ---
 
 # Avoid AI Writing
