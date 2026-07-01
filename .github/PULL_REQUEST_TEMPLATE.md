@@ -4,7 +4,7 @@
 
 ## Checklist
 
-- [ ] `npm run build` was run and generated distributions are committed
+- [ ] `npm run build` was run and generated `SKILL.md` is committed
 - [ ] `npm test` passes (engine fixtures + `CATEGORIES.md` contract check)
 - [ ] If I added a detector `type`: it's documented in `detector/CATEGORIES.md` and has a fixture in `detector/patterns.test.js` (a true positive **and** a must-not-fire case)
 - [ ] If I added a judgment-only rule: it's listed under "Skill-only" in `detector/CATEGORIES.md`

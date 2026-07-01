@@ -4,6 +4,18 @@ All notable changes to this project are documented here.
 
 ---
 
+## [4.0.2] — 2026-07-01
+
+### Changed
+- Made the root `SKILL.md` the directly installable optimized Cursor skill.
+- Moved maintainable router, catalog, and profile sources under `src/`.
+- Rewrote the README around the product, installation, editing behavior, and StoryScope-derived changes.
+
+### Removed
+- The `dist/` directory and its competing runtime/standalone choices.
+
+---
+
 ## [4.0.1] — 2026-07-01
 
 ### Changed

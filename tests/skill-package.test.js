@@ -35,9 +35,10 @@ function assertIncludesAll(text, values, label) {
   assert.deepEqual(missing, [], `${label} missing: ${missing.join(', ')}`);
 }
 
-const skill = read('SKILL.md');
-const profiles = read('references/PROFILES.md');
-const patterns = read('references/PATTERN-CATALOG.md');
+const skill = read('src/skill-router.md');
+const generatedSkill = read('SKILL.md');
+const profiles = read('src/profiles.md');
+const patterns = read('src/pattern-catalog.md');
 const structural = read('references/STRUCTURAL-AUDIT.md');
 
 console.log('Skill package contract');
@@ -45,11 +46,13 @@ console.log('Skill package contract');
 test('public name and version match the contract', () => {
   assert.equal(frontmatterValue(skill, 'name'), contract.name);
   assert.equal(frontmatterValue(skill, 'version'), contract.version);
+  assert.equal(frontmatterValue(generatedSkill, 'name'), contract.name);
+  assert.equal(frontmatterValue(generatedSkill, 'version'), contract.version);
 });
 
-test('main SKILL.md stays below 500 lines', () => {
+test('canonical skill router stays below 500 lines', () => {
   const lines = skill.split('\n').length;
-  assert.ok(lines < 500, `SKILL.md has ${lines} lines`);
+  assert.ok(lines < 500, `src/skill-router.md has ${lines} lines`);
 });
 
 test('legacy modes, flags, contexts, and voices remain documented', () => {
@@ -79,10 +82,10 @@ test('output headings and order remain compatible', () => {
 });
 
 test('all directly linked references exist', () => {
-  const links = [...skill.matchAll(/\]\(\.\/(references\/[^)]+\.md)\)/g)].map((match) => match[1]);
+  const links = [...skill.matchAll(/\]\(([^)]+\.md)\)/g)].map((match) => match[1]);
   assert.ok(links.length >= 3, 'expected at least three direct reference links');
   for (const link of links) {
-    assert.ok(fs.existsSync(path.join(root, link)), `missing reference: ${link}`);
+    assert.ok(fs.existsSync(path.resolve(root, 'src', link)), `missing reference: ${link}`);
   }
 });
 
@@ -185,9 +188,9 @@ test('depth-contract fixtures cover opt-in structure and authoritative second pa
 
 test('runtime source files contain no replacement characters', () => {
   const files = [
-    'SKILL.md',
-    'references/PATTERN-CATALOG.md',
-    'references/PROFILES.md',
+    'src/skill-router.md',
+    'src/pattern-catalog.md',
+    'src/profiles.md',
     'references/STRUCTURAL-AUDIT.md',
   ];
   for (const file of files) {
@@ -202,29 +205,24 @@ test('release metadata versions stay synchronized', () => {
   assert.equal(surfaceCategories.version, contract.version);
   assert.equal(surfaceCategories.categories.length, 47);
   assert.equal(frontmatterValue(skill, 'version'), contract.version);
+  assert.equal(frontmatterValue(generatedSkill, 'version'), contract.version);
 });
 
-test('flattened distributions include all required modules', () => {
-  const runtime = read('dist/avoid-ai-writing-runtime.md');
-  const standalone = read('dist/avoid-ai-writing-standalone.md');
-  assert.ok(runtime.includes('# Pattern catalog'));
-  assert.ok(runtime.includes('# Context and voice profiles'));
-  assert.ok(!runtime.includes('# Structural audit'));
-  assert.ok(runtime.includes('./references/STRUCTURAL-AUDIT.md'));
-  assert.ok(!runtime.includes('\uFFFD'));
-  assert.ok(standalone.includes('# Pattern catalog'));
-  assert.ok(standalone.includes('# Context and voice profiles'));
-  assert.ok(standalone.includes('# Structural audit'));
-  assert.ok(!standalone.includes('\uFFFD'));
+test('generated root skill embeds default modules', () => {
+  assert.ok(generatedSkill.includes('# Pattern catalog'));
+  assert.ok(generatedSkill.includes('# Context and voice profiles'));
+  assert.ok(!generatedSkill.includes('# Structural audit'));
+  assert.ok(generatedSkill.includes('./references/STRUCTURAL-AUDIT.md'));
+  assert.ok(!generatedSkill.includes('\uFFFD'));
 });
 
 test('public package is Cursor-only', () => {
   const files = [
-    'SKILL.md',
+    'src/skill-router.md',
     'README.md',
     'AGENTS.md',
     'package.json',
-    'scripts/build-distributions.mjs',
+    'scripts/build-skill.mjs',
   ];
   const forbidden = /\b(?:Claude|Cowork|OpenClaw|Hermes|Codex)\b|cursor-rules|claude-plugin/i;
   for (const file of files) {

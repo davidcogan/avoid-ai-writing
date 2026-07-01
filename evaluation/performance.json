@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-07-01T16:05:48.962Z",
+  "capturedAt": "2026-07-01T16:55:03.002Z",
   "contextPayload": {
     "currentV3Bytes": 58508,
     "candidateDefaultSurfaceBytes": 41956,
@@ -18,9 +18,9 @@
     "sampleWords": 64,
     "iterationsPerRound": 1000,
     "rounds": 7,
-    "currentV3MedianMs": 49.688375,
-    "candidateV4MedianMs": 49.597875,
-    "changePercent": -0.18213515736829528,
+    "currentV3MedianMs": 50.75675,
+    "candidateV4MedianMs": 50.101291,
+    "changePercent": -1.2913730686066256,
     "note": "Local microbenchmark only. End-to-end model latency depends on provider, load, and output length."
   },
   "runtimeLoading": {

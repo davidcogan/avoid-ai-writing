@@ -1,216 +1,108 @@
-<div align="center">
-
 # avoid-ai-writing
 
-A Cursor Agent Skill for removing AI-writing patterns without damaging facts, voice, or
-genre conventions.
+`avoid-ai-writing` is a Cursor Agent Skill that edits prose that sounds generated,
+over-polished, vague, or structurally canned. It rewrites weak passages while preserving
+facts, citations, technical terms, formatting, and the writer's voice.
 
-[![License: MIT](https://img.shields.io/github/license/davidcogan/avoid-ai-writing)](LICENSE)
+The patterns are editing signals, not proof of authorship. Human writers use them too.
 
-</div>
+## Install
 
----
+### User-level
 
-## What this is
-
-`avoid-ai-writing` is a **Cursor skill**. Cursor discovers it by its frontmatter name and
-loads it when you invoke `avoid-ai-writing` directly or ask for work such as:
-
-```text
-Remove AI-isms from this post.
-Audit this draft for AI tells.
-Make this sound less like AI.
-Edit post.md in place.
-Scan this, but do not rewrite it.
-```
-
-It supports three modes:
-
-- **Rewrite** (default): audit, rewrite, summarize changes, and run a corrective pass.
-- **Detect**: report clear issues and judgment calls without rewriting.
-- **Edit**: make minimal changes to a named file and verify the result.
-
-An optional structural pass is available only when requested:
-
-```text
-Run a deep structural audit before rewriting.
---depth structural
-```
-
-The skill treats AI-associated patterns as editing signals, never proof of authorship.
-
-## Install in Cursor
-
-### User-level installation (recommended)
-
-Use this when you want the skill available in every Cursor project:
+Install once to use the skill across Cursor projects:
 
 ```bash
+VERSION=v4.0.2
 mkdir -p ~/.cursor/skills/avoid-ai-writing/references
 
-curl --fail --show-error --location \
-  https://raw.githubusercontent.com/davidcogan/avoid-ai-writing/HEAD/dist/avoid-ai-writing-runtime.md \
+curl -fsSL \
+  "https://raw.githubusercontent.com/davidcogan/avoid-ai-writing/${VERSION}/SKILL.md" \
   -o ~/.cursor/skills/avoid-ai-writing/SKILL.md
 
-curl --fail --show-error --location \
-  https://raw.githubusercontent.com/davidcogan/avoid-ai-writing/HEAD/references/STRUCTURAL-AUDIT.md \
+curl -fsSL \
+  "https://raw.githubusercontent.com/davidcogan/avoid-ai-writing/${VERSION}/references/STRUCTURAL-AUDIT.md" \
   -o ~/.cursor/skills/avoid-ai-writing/references/STRUCTURAL-AUDIT.md
 ```
 
-Restart Cursor or open a fresh chat, then test:
+### Project-level
 
-```text
-Which version of avoid-ai-writing is loaded? Then run it in detect mode on:
-"Certainly! The future looks bright!"
-```
-
-Expected: version `4.0.1`, followed by `Issues found` and `Assessment` sections that flag
-the chatbot opener and generic conclusion.
-
-### Project-level installation
-
-Use this when a repository should pin and share the skill with its contributors. Run these
-commands from the repository root. The URLs use the `v4.0.1` tag rather than mutable
-`HEAD`:
+Pin the skill in a repository when everyone working there should use the same version. Run
+these commands from the repository root:
 
 ```bash
+VERSION=v4.0.2
 mkdir -p .cursor/skills/avoid-ai-writing/references
 
-curl --fail --show-error --location \
-  https://raw.githubusercontent.com/davidcogan/avoid-ai-writing/v4.0.1/dist/avoid-ai-writing-runtime.md \
+curl -fsSL \
+  "https://raw.githubusercontent.com/davidcogan/avoid-ai-writing/${VERSION}/SKILL.md" \
   -o .cursor/skills/avoid-ai-writing/SKILL.md
 
-curl --fail --show-error --location \
-  https://raw.githubusercontent.com/davidcogan/avoid-ai-writing/v4.0.1/references/STRUCTURAL-AUDIT.md \
+curl -fsSL \
+  "https://raw.githubusercontent.com/davidcogan/avoid-ai-writing/${VERSION}/references/STRUCTURAL-AUDIT.md" \
   -o .cursor/skills/avoid-ai-writing/references/STRUCTURAL-AUDIT.md
 ```
 
-Commit `.cursor/skills/avoid-ai-writing/` so every contributor gets the same version.
+Commit `.cursor/skills/avoid-ai-writing/` with the rest of the project.
 
-Choose one scope for the same installation. A user-level skill is best for personal,
-cross-project use; a project-level skill is best when a team wants the repository to own the
-version. Installing both can make discovery and version debugging harder.
+Choose one scope for a given project. Installing both copies makes version debugging harder.
 
-### Do not install this as a Cursor rule
+Restart Cursor or open a fresh chat after installation. To verify the setup, ask:
 
-This repository does not ship an `.mdc` rule. A rule would attach the full editing policy
-ambiently based on file globs, increasing context use and making invocation less explicit.
-The skill is the supported integration.
-
-Do not clone the full source repository into `~/.cursor/skills` or
-`.cursor/skills`. Install only the generated runtime files above. The source checkout
-contains tests, fixtures, scripts, and generated artifacts that Cursor does not need at
-runtime.
-
-## What `dist/` means
-
-The files in `dist/` are **generated Cursor installation artifacts**. Maintainers edit the
-canonical source files:
-
-- `SKILL.md`
-- `references/PATTERN-CATALOG.md`
-- `references/PROFILES.md`
-- `references/STRUCTURAL-AUDIT.md`
-
-Then `npm run build` assembles the installable files.
-
-### `dist/avoid-ai-writing-runtime.md` — recommended
-
-This is the optimized user/project-level `SKILL.md`.
-
-It embeds:
-
-- the skill router and public behavior contract;
-- the surface pattern catalog;
-- context and voice profiles.
-
-It leaves the structural audit as a separate reference because structural analysis is
-opt-in. This keeps normal rewrites fast:
-
-- v3.8 skill payload: 58,508 bytes;
-- v4 optimized runtime: 41,956 bytes;
-- 28.3% smaller on the default path.
-
-Install this file as `SKILL.md`, plus
-`references/STRUCTURAL-AUDIT.md`, using the commands above.
-
-### `dist/avoid-ai-writing-standalone.md` — optional one-file install
-
-This file embeds everything, including the structural audit. It can be saved directly as
-`SKILL.md` with no references directory:
-
-```bash
-mkdir -p ~/.cursor/skills/avoid-ai-writing
-
-curl --fail --show-error --location \
-  https://raw.githubusercontent.com/davidcogan/avoid-ai-writing/HEAD/dist/avoid-ai-writing-standalone.md \
-  -o ~/.cursor/skills/avoid-ai-writing/SKILL.md
+```text
+Which version of avoid-ai-writing is loaded? Run it in detect mode on:
+"Certainly! The future looks bright!"
 ```
 
-The standalone file is simpler to copy but loads the structural instructions on every use.
-For a project-level one-file install, save it as
-`.cursor/skills/avoid-ai-writing/SKILL.md` and pin the download URL to a release tag.
-For normal internal Cursor use, prefer the optimized runtime.
+The response should report version `4.0.2`, then flag the chatbot opener and generic
+conclusion without rewriting the text.
 
-Generated files should not be edited directly. Change the canonical sources and rebuild.
+## Use
 
-## What version 4 changes
+Example requests:
 
-### Preservation comes first
+```text
+Remove the AI-isms from this post.
+Make this sound less like AI.
+Audit this draft, but do not rewrite it.
+Edit README.md in place.
+Rewrite this in my voice.
+Run a structural audit before rewriting.
+```
 
-The skill preserves:
+The three modes are:
 
-- facts, numbers, dates, names, links, and quotations;
-- citations and claim-to-source relationships;
-- code and technical identifiers;
-- negation, modality, uncertainty, units, and scope;
-- attributed or protected material.
+- `rewrite` audits the text, returns a revised version, summarizes the edits, and checks its
+  own rewrite.
+- `detect` reports problems and judgment calls without changing the text.
+- `edit` makes targeted changes to a file and verifies the result.
 
-It does not invent evidence, examples, metrics, causal explanations, or personal
-experiences to make prose sound human.
+Specify context and voice when needed:
 
-### Structural audit
+```text
+--context docs|email|slides|research|linkedin|blog|technical-blog|investor-email|casual|fiction|narrative-nonfiction
+--voice casual|professional|technical|warm|blunt
+--depth surface|structural
+```
 
-When explicitly requested, the structural pass checks:
+Surface editing is the default. Structural analysis runs only when requested.
 
-- repeated explanation of an implication the evidence already carries;
-- causal stories cleaner than the evidence supports;
-- empty hedging versus material uncertainty;
-- evidence that should recontextualize an earlier claim;
-- conclusions that resolve more than the evidence permits;
-- stacked bodily, sensory, and environmental cues;
-- missing external anchors;
-- generic rather than audience-specific reader framing;
-- repeated argument templates across a batch.
+## What it catches
 
-Global changes to section order, chronology, thesis, evidence, point of view, plot, or ending
-require explicit approval.
+The surface pass checks:
 
-### Genre protection
+- stock vocabulary and inflated verbs: `delve`, `leverage`, `serves as`, `game-changing`;
+- generic framing: `In today's rapidly evolving landscape`, `Moreover`, `In conclusion`;
+- unsupported importance: `pivotal moment`, `broader shift`, `the future looks bright`;
+- repetitive shapes: symmetrical bullets, canned concessions, uniform paragraph rhythm;
+- credibility problems: vague attribution, invented certainty, leaked citation tokens,
+  placeholders, and model-interface residue.
 
-The skill preserves functional conventions in:
+It also catches writing problems that are not unique to AI. Precise technical terms,
+deliberate repetition, and well-placed rhetorical questions stay when they serve the
+document's audience.
 
-- technical documentation;
-- research and analytical writing;
-- email;
-- slides;
-- social posts;
-- fiction and narrative nonfiction;
-- second-language prose;
-- a supplied author voice.
-
-Linearity, repetition, headings, lists, fragments, explicit summaries, and calibrated
-hedging are not defects when the format needs them.
-
-### Surface catalog
-
-The generated runtime includes **47 surface pattern categories** plus the semantic
-structural checks. Vocabulary tiers, punctuation counts, list lengths, and similar
-thresholds are review heuristics rather than authorship evidence.
-
-## Quick example
-
-**Input**
+Before:
 
 > Certainly! Acme Analytics, a vibrant startup nestled in the heart of Boulder, raised a
 > $40M Series B in June 2026. The platform serves as a comprehensive hub, featuring
@@ -218,56 +110,64 @@ thresholds are review heuristics rather than authorship evidence.
 > round underscores Acme's game-changing potential. Experts believe it is poised to
 > revolutionize observability. In conclusion, the future looks bright!
 
-**Output**
+After:
 
 > Acme Analytics, a startup in Boulder, raised a $40M Series B in June 2026. Its platform
 > includes real-time dashboards and has query latency under one second.
 
-The rewrite removes interface language, promotional framing, inflated verbs, unsupported
-predictions, and the generic conclusion. It does not add investors, customers, benchmarks,
-market size, or use-of-funds claims.
+The rewrite keeps every supplied fact and drops the unsupported prediction. It does not
+invent investors, customers, benchmarks, market size, or plans for the funding.
 
-## Updating
+## What the StoryScope study added
 
-Rerun the same installation commands, then restart Cursor or open a fresh chat. The public
-skill name remains `avoid-ai-writing`, so existing instructions and workflows continue to
-invoke the updated version.
+Earlier versions focused mostly on visible style: vocabulary, punctuation, sentence rhythm,
+formatting, and repeated rhetorical templates.
 
-## Repository layout
+StoryScope began with 10,272 published human stories. The researchers reverse-engineered a
+prompt from each story, then asked five language models to write new stories from those
+prompts, producing 61,608 stories in total. Narrative features alone reached 93.2%
+macro-F1 inside that benchmark. On a separate 278-story Gemini subset, removing surface
+artifacts reduced macro-F1 by only 1.6 points, from 95.5% to 93.9%.
 
-```text
-SKILL.md                                  Canonical router and public contract
-references/PATTERN-CATALOG.md             Canonical surface catalog
-references/PROFILES.md                    Canonical context and voice profiles
-references/STRUCTURAL-AUDIT.md            Canonical opt-in structural audit
-dist/avoid-ai-writing-runtime.md           Recommended generated Cursor runtime
-dist/avoid-ai-writing-standalone.md        Optional generated one-file runtime
-contracts/                                Public and category contracts
-detector/                                 Optional deterministic surface scanner
-evaluation/                               Public fixtures and aggregate results
-tests/                                    Package and genre-gate tests
-scripts/                                  Build, benchmark, deploy, and rollback tools
-```
+Changing words may leave the underlying argument or narrative untouched.
 
-## Optional deterministic detector
+Version 4 added an optional structural audit for:
 
-The Cursor skill does not require the detector.
+- explaining the same implication after the evidence has already made it clear;
+- reducing a complicated outcome to one clean cause or solution;
+- ignoring counterevidence while presenting a settled conclusion;
+- repeating bodily, sensory, or environmental cues that all perform the same emotion;
+- making broad claims without a concrete source, example, or audience-specific consequence.
 
-`detector/patterns.js` is available for CI, websites, or scripts that need deterministic
-surface-pattern checks:
+The study covers long English fiction in this benchmark, so the skill does not treat its
+findings as universal writing rules. It does not add flashbacks, ambiguity, subplots,
+disorder, or personal anecdotes to make text seem human. Documentation, email, slides,
+research, and technical writing keep their functional structure.
 
-```js
-const AIDetector = require("./detector/patterns.js");
-const result = AIDetector.analyzeText("Your text here...");
-console.log(result.pattern_load, result.issues);
-```
+The audit can identify structural problems, but reordering sections, changing chronology,
+altering a thesis, or adding and removing evidence requires explicit approval.
 
-The detector reports configured pattern load, not authorship probability.
+Source: Jenna Russell et al.,
+["StoryScope: Investigating idiosyncrasies in AI fiction"](https://arxiv.org/abs/2604.03136),
+arXiv:2604.03136v4 (2026), preprint under review.
 
-## Build and test
+## Editing safeguards
 
-Repository development requires Node 18+, Bash, and Python 3. The installed Cursor skill
-has no runtime dependencies.
+The preservation contract covers:
+
+- facts, numbers, dates, names, links, quotations, and citations;
+- negation, uncertainty, scope, units, and causal boundaries;
+- code, commands, technical identifiers, tables, and intentional formatting;
+- quoted or attributed material;
+- genre conventions and a supplied writing sample.
+
+If a safe fix needs evidence that was not provided, the skill leaves the claim unchanged and
+asks for a source or author decision.
+
+## Repository development
+
+Build the installable root `SKILL.md` from the modules in `src/`. The structural audit
+remains in `references/STRUCTURAL-AUDIT.md`.
 
 ```bash
 npm run build
@@ -275,46 +175,10 @@ npm test
 npm run test:deploy
 ```
 
-`npm run build` regenerates both files in `dist/`.
+An optional deterministic surface detector supports CI and other programmatic checks. The
+Cursor skill does not require it.
 
-The tests cover:
-
-- detector behavior and category mapping;
-- the public skill contract;
-- reference links;
-- generated distribution freshness;
-- genre protection and structural-depth gates;
-- version synchronization;
-- deployment, interruption recovery, and exact rollback.
-
-## Performance
-
-Against v3.8:
-
-- default runtime payload: 28.3% smaller;
-- explicit structural total: 9.6% smaller;
-- detector microbenchmark: no measurable regression.
-
-To refresh the benchmark against a v3.8 checkout:
-
-```bash
-AVOID_AI_BASELINE_ROOT=/path/to/avoid-ai-writing-v3.8 npm run benchmark:performance
-```
-
-Model/provider load, document length, and requested output length still affect end-to-end
-latency.
-
-## Research boundary
-
-The structural audit was informed by:
-
-- Russell et al., ["StoryScope: Investigating idiosyncrasies in AI
-  fiction"](https://arxiv.org/abs/2604.03136), arXiv:2604.03136v4, 2026,
-  preprint under review.
-
-StoryScope studies long English fiction in a constructed parallel corpus. Its findings
-motivate optional craft questions; they do not validate authorship judgments, universal
-writing rules, short-text detection, or unseen-model detection.
+Public fixtures and aggregate results are in [`evaluation/`](evaluation/).
 
 ## Credits
 

@@ -28,7 +28,7 @@ if contains(target, backup):
 PY
 
 runtime_sources=(
-  "dist/avoid-ai-writing-runtime.md"
+  "SKILL.md"
   "references/STRUCTURAL-AUDIT.md"
 )
 
@@ -59,7 +59,7 @@ echo "source: $repo_root"
 echo "target: $target"
 echo "backup root: $backup_root"
 echo "runtime mapping:"
-echo "  dist/avoid-ai-writing-runtime.md -> SKILL.md"
+echo "  SKILL.md -> SKILL.md"
 echo "  references/STRUCTURAL-AUDIT.md -> references/STRUCTURAL-AUDIT.md"
 
 if [ "$mode" = "--dry-run" ]; then
@@ -109,7 +109,7 @@ trap 'recover 143' TERM
 trap 'recover 129' HUP
 
 mkdir -p "$staging/references"
-cp "$repo_root/dist/avoid-ai-writing-runtime.md" "$staging/SKILL.md"
+cp "$repo_root/SKILL.md" "$staging/SKILL.md"
 cp "$repo_root/references/STRUCTURAL-AUDIT.md" "$staging/references/STRUCTURAL-AUDIT.md"
 
 skill_count="$(

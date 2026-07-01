@@ -1,7 +1,7 @@
 # Category map: runtime references ↔ detector
 
 This table is the anti-drift contract between the human-readable rules in
-`../references/PATTERN-CATALOG.md`, the structural audit, and the executable
+`../src/pattern-catalog.md`, the structural audit, and the executable
 engine in `patterns.js`. When you add a rule, decide here whether it is
 regex-detectable (give it a detector `type`) or LLM-only judgment (mark it so).
 When you add a detector `type`, point it back at the catalog section it enforces.

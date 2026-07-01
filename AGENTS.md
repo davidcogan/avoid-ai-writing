@@ -10,17 +10,16 @@ contract. See `contracts/public-contract.json`.
 
 ## Canonical sources
 
-- `SKILL.md`: concise router, safety contract, modes, workflow, and outputs.
-- `references/PATTERN-CATALOG.md`: surface patterns and severity.
-- `references/PROFILES.md`: context and voice behavior.
+- `src/skill-router.md`: concise router, safety contract, modes, workflow, and outputs.
+- `src/pattern-catalog.md`: surface patterns and severity.
+- `src/profiles.md`: context and voice behavior.
 - `references/STRUCTURAL-AUDIT.md`: permissioned document-level audit.
 - `detector/patterns.js`: optional deterministic surface detector.
 - `contracts/`: machine-readable public and category inventories.
 
-Generated files:
+Generated file:
 
-- `dist/avoid-ai-writing-runtime.md`;
-- `dist/avoid-ai-writing-standalone.md`.
+- `SKILL.md`: directly installable optimized Cursor skill.
 
 Do not edit generated files directly.
 
@@ -34,8 +33,8 @@ Do not edit generated files directly.
 
 ## Constraints
 
-- Keep `SKILL.md` under 500 lines.
-- Keep reference links directly reachable from `SKILL.md`.
+- Keep `src/skill-router.md` under 500 lines.
+- Keep reference links directly reachable from the router.
 - Preserve the self-reference escape hatch and protected-material behavior.
 - Do not turn a correlation into an authorship verdict or universal writing rule.
 - Do not add facts, sources, examples, or personal experiences during a rewrite.
