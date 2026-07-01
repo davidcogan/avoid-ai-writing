@@ -1,44 +1,57 @@
-# CLAUDE.md
+# Repository guidance
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## Product
 
-## What this is
+This repository contains the `avoid-ai-writing` Agent Skill, its deterministic surface
+detector, generated distributions, and compatibility tests.
 
-A single-file writing skill (`SKILL.md`) that audits and rewrites content to remove AI writing patterns. No build system, no dependencies, no tests — the skill is a markdown file consumed by AI coding assistants.
+The public skill name, modes, flags, legacy profiles, and output headings are a compatibility
+contract. See `contracts/public-contract.json`.
 
-## Repository structure
+## Canonical sources
 
-- `SKILL.md` — the skill itself (v3.7.2). This is the product. All rules, tiers, profiles, and output format live here.
-- `README.md` — public-facing docs, installation instructions, pattern reference table, full before/after example.
-- `CHANGELOG.md` — version history with what changed and why.
+- `SKILL.md`: concise router, safety contract, modes, workflow, and outputs.
+- `references/PATTERN-CATALOG.md`: surface patterns and severity.
+- `references/PROFILES.md`: context and voice behavior.
+- `references/STRUCTURAL-AUDIT.md`: permissioned document-level audit.
+- `detector/patterns.js`: deterministic surface detector.
+- `contracts/`: machine-readable public and category inventories.
 
-## How to make changes
+Generated files:
 
-Edit `SKILL.md` directly. There's nothing to build or test. When making changes:
+- `dist/avoid-ai-writing-standalone.md`;
+- `cursor-rules/avoid-ai-writing.mdc`;
+- `plugins/avoid-ai-writing/skills/avoid-ai-writing/`.
 
-- Bump the version in the SKILL.md frontmatter (`version: X.Y.Z`)
-- Add a dated entry to CHANGELOG.md
-- Update README.md if the change affects installation, usage, feature list, or pattern count
-- The pattern count lives in **one** place — the README "46 pattern categories" bullet — and is derived from SKILL.md's detection `###` entries. Don't restate it elsewhere; CI (`scripts/check-pattern-count.sh`) fails the build if the README number drifts from SKILL.md, so just add the new `###` entry and bump the README bullet.
+Do not edit generated files directly.
 
-## Architecture of the skill
+## Change workflow
 
-The skill has three modes (`rewrite` default, `detect` flag-only, `edit` in-place) and processes text through this pipeline:
+1. Edit canonical sources.
+2. Update metadata and `CHANGELOG.md` when behavior changes.
+3. Run `npm run build`.
+4. Run `npm test`.
+5. Inspect generated diffs for lost instructions or damaged formatting.
 
-1. **Context profile detection** — auto-detects or accepts a profile hint (linkedin, blog, technical-blog, investor-email, docs, casual) that adjusts rule strictness via the tolerance matrix
-2. **Pattern matching** — detection categories across content, language, structure, communication, and meta patterns (see SKILL.md for the catalog; the count is in the README bullet)
-3. **Vocabulary flagging** — 3-tier system: Tier 1 (always flag), Tier 2 (flag in clusters), Tier 3 (flag at high density)
-4. **Severity classification** — P0 (credibility killers), P1 (obvious AI smell), P2 (stylistic polish)
-5. **Output** — rewrite mode: 4 sections including a second-pass audit; detect mode: 2 sections with problem vs. judgment-call assessment
+## Constraints
 
-## Key constraints
+- Keep `SKILL.md` under 500 lines.
+- Keep reference links directly reachable from `SKILL.md`.
+- Preserve the self-reference escape hatch and protected-material behavior.
+- Do not turn a correlation into an authorship verdict or universal writing rule.
+- Do not add facts, sources, examples, or personal experiences during a rewrite.
+- Global structural changes require explicit user consent.
+- Regex-detectable additions need detector fixtures and category mapping.
+- Semantic additions belong in the pattern or structural references and in
+  `detector/CATEGORIES.md` as judgment-only checks.
+- Add a true-positive and a must-not-fire case for detector changes.
+- Add genre-gate fixtures for profile or structural-policy changes.
 
-- The skill must remain a single `SKILL.md` file with agentskills.io-compatible frontmatter
-- Word replacement table entries need specific alternatives, not just "rephrase"
-- The self-reference escape hatch (quoted examples exempt from flagging) must be preserved — without it the skill flags its own documentation
-- Technical-blog profile has explicit word table exceptions (e.g., "robust" and "ecosystem" are legitimate in technical contexts)
-- "Extra strict" and "skip" in the tolerance matrix have specific meanings defined in the file
+## Commands
 
-## Compatibility
+```bash
+npm run build
+npm test
+```
 
-The skill works with Claude Code, OpenClaw/ClawHub, and any agentskills.io-compatible agent. The frontmatter includes both `agentskills_spec` and `openclaw` fields. Changes must not break either format.
+Node 18+ is required. No package installation is needed.

@@ -628,15 +628,31 @@ const AIDetector = (() => {
   // regex passes over a huge buffer — protects page perf on pasted novels.
   const MAX_WORDS = 10000;
 
-  // V2 contract defaults so early-exit paths (Empty/tooShort/tooLong)
-  // still return the same field shape a v2 consumer expects. Without
-  // this, `result.document_classification === 'AI_ONLY'` is `undefined`
-  // on edge inputs and fails open.
-  // UNSCORED is returned on empty / too-short / too-long inputs where
-  // we declined to score. Distinct from HUMAN_ONLY (which is a positive
-  // classification) so a caller can't mistake a refused scan for a
-  // confident human verdict — a 50k-word LLM-generated document is
-  // not "human", it's just outside our scoring window.
+  const CLASSIFICATION_WARNING =
+    'Heuristic surface-pattern load only; not an authorship probability or verdict.';
+
+  function buildPatternLoad(classification, probabilities) {
+    const load = classification === 'HUMAN_ONLY'
+      ? 'LOW'
+      : classification === 'AI_ONLY'
+        ? 'HIGH'
+        : classification;
+    return {
+      pattern_load: load,
+      pattern_load_weights: {
+        low: probabilities.human,
+        mixed: probabilities.mixed,
+        high: probabilities.ai,
+      },
+      authorship_assessment: null,
+      classification_basis: 'heuristic_surface_pattern_load',
+      classification_warning: CLASSIFICATION_WARNING,
+    };
+  }
+
+  // Legacy v2 fields remain for existing consumers. New integrations should
+  // use pattern_load and pattern_load_weights. The legacy labels and soft
+  // weights are not calibrated authorship estimates.
   function buildV2Defaults(classification, confidence) {
     const probs = classification === 'HUMAN_ONLY'
       ? { human: 1, mixed: 0, ai: 0 }
@@ -644,10 +660,12 @@ const AIDetector = (() => {
         ? { human: 0, mixed: 0, ai: 1 }
         : { human: 0.333, mixed: 0.334, ai: 0.333 };
     return {
+      ...buildPatternLoad(classification, probs),
       document_classification: classification,
       class_probabilities: probs,
       confidence_category: confidence,
       highlight_sentence_for_ai: [],
+      highlight_sentence_for_patterns: [],
     };
   }
 
@@ -1278,13 +1296,11 @@ const AIDetector = (() => {
     const tier2Count = deduped.filter((i) => i.type === 'tier2').length;
     const tier3Count = deduped.filter((i) => i.type === 'tier3').length;
 
-    // ── Trinary classification (GPTZero-shaped) ──────────────────────
-    // Decouples confidence from AI-proportion. Maps the 0-100 score plus
-    // structural signals into HUMAN_ONLY / MIXED / AI_ONLY with a
-    // confidence band. Thresholds are FN-biased: ambiguity routes to
-    // MIXED, never AI_ONLY. Quote from GPTZero's design principle:
-    // "biases the detector to prefer making less-harmful false-negative
-    // errors over false-positive errors."
+    // ── Legacy trinary classification ─────────────────────────────────
+    // Maps the configured surface-pattern score and corroborators into the
+    // v2 HUMAN_ONLY / MIXED / AI_ONLY labels. V4 exposes the same result as
+    // LOW / MIXED / HIGH pattern load and explicitly does not interpret it
+    // as authorship.
     // Dense-AI-vocab trifecta: ≥5 distinct tier1 hits + ≥2 tier2 cluster
     // paragraphs + ≥1 transition phrase, AND ≥150 words. Catches
     // saturated ChatGPT prose without firing on dense-jargon human
@@ -1327,7 +1343,11 @@ const AIDetector = (() => {
         denseAIVocab,
         tier1Distinct,
       },
-      // Trinary API — shape mirrors GPTZero so integrators can swap.
+      // Safe v4 interpretation. These are surface-pattern load weights,
+      // not authorship probabilities.
+      ...buildPatternLoad(trinary.classification, trinary.probabilities),
+      highlight_sentence_for_patterns: regions,
+      // Deprecated v2 aliases preserved for existing integrations.
       document_classification: trinary.classification,
       class_probabilities: trinary.probabilities,
       confidence_category: trinary.confidence,
@@ -1445,12 +1465,11 @@ const AIDetector = (() => {
     };
   }
 
-  // FN-biased: false positives damage trust more than false negatives,
-  // so MIXED is wide and AI_ONLY requires multiple signals. Quote from
-  // GPTZero: "biases the detector to prefer making less-harmful
-  // false-negative errors over false-positive errors."
+  // Compatibility classifier for the v2 API. MIXED is wide and the legacy
+  // AI_ONLY label requires multiple configured surface signals. The label
+  // does not establish who wrote the text.
   function classifyTrinary({ score, issues, regions, normFlags, wordCount, denseAIVocab }) {
-    // Strong corroborators — each is near-dispositive on its own:
+    // Strong surface-pattern corroborators:
     //   - cutoff-disclaimer (LLM self-identifies as an AI)
     //   - reasoning-artifact + chatbot-artifact co-occurrence
     //   - normalization-flag at threshold (≥2 ZWSP or homoglyphs).
@@ -1490,16 +1509,11 @@ const AIDetector = (() => {
     else if (score >= 40 && totalCorrob >= 1) classification = 'AI_ONLY';
     else classification = 'MIXED';
 
-    // Humanizer-flag escalation: presence of bypass-trick chars is
-    // adversarial signal. If a normalization-flag fired we already
-    // counted it in strongCorrob → AI_ONLY. Confidence also gets a
-    // floor of 'medium' in that case (an adversary actively evading
-    // detection should never read as low-confidence noise).
+    // Normalization flags increase the configured pattern-load result.
 
-    // Soft probability distribution. Not calibrated against a labeled
-    // corpus yet (TODO when corpus exists — see roadmap.md). Largest
-    // class is computed as `1 - others` after rounding to guarantee
-    // sum=1 exactly. Sub-1% drift would otherwise hide in toFixed.
+    // Legacy soft weights. They are not calibrated authorship probabilities.
+    // The largest class is computed as `1 - others` after rounding to
+    // guarantee sum=1 exactly.
     const aiSoft = Math.min(0.97, score / 100 + totalCorrob * 0.06 + strongCorrob * 0.08);
     let p;
     if (classification === 'HUMAN_ONLY') p = { human: Math.max(0.6, 1 - aiSoft), mixed: Math.min(0.35, aiSoft * 0.8), ai: Math.min(0.1, aiSoft * 0.3) };

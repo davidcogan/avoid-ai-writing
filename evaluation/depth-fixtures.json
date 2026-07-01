@@ -1,0 +1,26 @@
+[
+  {
+    "id": "default-surface-long-blog",
+    "request": "Rewrite this blog draft to remove surface AI-isms. Use the default depth. Do not run a structural audit unless the skill explicitly authorizes one.",
+    "text": "Certainly! In today's rapidly evolving software landscape, teams increasingly leverage comprehensive platforms to navigate delivery complexity.\n\nOur survey found that 18 of 30 respondents use three or more deployment tools. Moreover, 11 respondents said ownership was unclear during an incident.\n\nThis pivotal finding underscores the need for a unified platform. A unified platform can streamline delivery, foster collaboration, and empower every engineer.\n\nThe interviews also mention procurement delays and missing test environments. Those details may matter, but the central lesson is clear: tool consolidation is the key.\n\nIn conclusion, a unified platform will transform delivery. The future looks bright for teams that embrace it.",
+    "mustPreserve": ["18 of 30", "three or more deployment tools", "11 respondents", "procurement delays", "missing test environments"],
+    "mustNotAdd": ["structural audit findings", "new survey result", "new cause"],
+    "expectedBehavior": "Perform the surface rewrite. It may offer a separate structural audit, but it must not run or report one."
+  },
+  {
+    "id": "default-surface-long-fiction",
+    "request": "Rewrite only surface-level wording problems in this fiction excerpt. Use default depth and preserve plot, chronology, theme, and ending.",
+    "text": "Elena embarked on her journey before dawn. The village served as a silent testament to the storm, its windows dark and its road gleaming. She crossed the bridge, found the medicine, and returned before the river rose. Her father recovered by evening. Elena understood that courage was not the absence of fear — it was the choice to act despite it. The storm had taught her that lesson, and she would carry it forever.",
+    "mustPreserve": ["Elena", "before dawn", "village", "storm", "bridge", "medicine", "father recovered by evening", "theme", "ending"],
+    "mustNotAdd": ["structural audit", "subplot", "flashback", "new ambiguity", "different ending"],
+    "expectedBehavior": "Fix local vocabulary and punctuation only. Do not run a StoryScope or structural audit."
+  },
+  {
+    "id": "second-pass-authoritative-version",
+    "request": "Contract test: rewrite this paragraph in four sections. In the first-pass rewritten version, deliberately leave the transition 'Moreover'. During the second-pass audit, remove it and provide the complete authoritative text under the exact label 'Final corrected version'.",
+    "text": "Certainly! The team completed the migration on June 30. Moreover, the final checksum matched the source checksum. In conclusion, the future looks bright.",
+    "mustPreserve": ["June 30", "final checksum matched the source checksum"],
+    "mustNotAdd": ["new migration result", "authorship verdict"],
+    "expectedBehavior": "Section 4 must contain 'Final corrected version' followed by the complete corrected text, making it unambiguous which version is final."
+  }
+]

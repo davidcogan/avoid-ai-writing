@@ -431,6 +431,18 @@ test('v2: trinary output present + FN-biased for ambiguous text', () => {
   assert.ok(['high', 'medium', 'low'].includes(r.confidence_category), 'expected confidence_category');
 });
 
+test('v4: safe pattern-load fields reject authorship interpretation', () => {
+  const text = 'The build broke again this morning. Rolled back the auth refactor and tests pass now. We still need to inspect the token refresh path before shipping.';
+  const r = AIDetector.analyzeText(text);
+  assert.ok(['LOW', 'MIXED', 'HIGH'].includes(r.pattern_load), `unexpected pattern_load: ${r.pattern_load}`);
+  assert.equal(r.authorship_assessment, null);
+  assert.equal(r.classification_basis, 'heuristic_surface_pattern_load');
+  assert.match(r.classification_warning, /not an authorship probability or verdict/i);
+  const sum = r.pattern_load_weights.low + r.pattern_load_weights.mixed + r.pattern_load_weights.high;
+  assert.ok(Math.abs(sum - 1) < 0.002, `pattern-load weights should sum to 1, got ${sum}`);
+  assert.ok(Array.isArray(r.highlight_sentence_for_patterns));
+});
+
 test('v2: highly AI-marked text reaches AI_ONLY with corroborators', () => {
   // High score + cutoff disclaimer (corroborator) → AI_ONLY at high confidence.
   const text = [
@@ -522,9 +534,13 @@ test('v2: trinary fields present on tooShort / tooLong / empty as UNSCORED', () 
   const tooLong = AIDetector.analyzeText('word '.repeat(10001));
   for (const [name, r] of [['empty', empty], ['tooShort', tooShort], ['tooLong', tooLong]]) {
     assert.equal(r.document_classification, 'UNSCORED', `${name}: expected UNSCORED, got ${r.document_classification}`);
+    assert.equal(r.pattern_load, 'UNSCORED', `${name}: expected UNSCORED pattern load`);
+    assert.equal(r.authorship_assessment, null, `${name}: authorship assessment must be null`);
     assert.equal(r.confidence_category, 'low', `${name}: expected low confidence`);
     assert.ok(r.class_probabilities, `${name}: missing class_probabilities`);
+    assert.ok(r.pattern_load_weights, `${name}: missing pattern_load_weights`);
     assert.ok(Array.isArray(r.highlight_sentence_for_ai), `${name}: missing highlight array`);
+    assert.ok(Array.isArray(r.highlight_sentence_for_patterns), `${name}: missing pattern highlight array`);
   }
   // Empty case has empty stats so contextMode field absent is fine;
   // tooShort/tooLong should surface contextMode for traceability.

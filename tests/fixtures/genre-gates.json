@@ -1,0 +1,121 @@
+[
+  {
+    "id": "long-form-argument",
+    "context": "blog",
+    "shape": "Sustained multi-section argument with repeated thesis and one-cause conclusion",
+    "structuralGate": "conditional",
+    "preserve": ["facts", "citations", "qualified claims"]
+  },
+  {
+    "id": "research-abstract",
+    "context": "research",
+    "shape": "Abstract with passive voice, statistical uncertainty, and explicit conclusion",
+    "structuralGate": "conditional",
+    "preserve": ["modality", "confidence interval", "technical terms", "IMRaD logic"]
+  },
+  {
+    "id": "technical-architecture-post",
+    "context": "technical-blog",
+    "shape": "Long architecture explanation with exact platform terms and failure modes",
+    "structuralGate": "conditional",
+    "preserve": ["technical terms", "code identifiers", "failure modes", "qualified claims"]
+  },
+  {
+    "id": "api-reference",
+    "context": "docs",
+    "shape": "Modular API reference with repeated identifiers and parameter bullets",
+    "structuralGate": "skip",
+    "preserve": ["identifiers", "lists", "stable terminology", "examples"]
+  },
+  {
+    "id": "incident-runbook",
+    "context": "docs",
+    "shape": "Ordered recovery procedure with explicit warnings and repeated commands",
+    "structuralGate": "skip",
+    "preserve": ["step order", "warnings", "commands", "linearity"]
+  },
+  {
+    "id": "customer-email",
+    "context": "email",
+    "shape": "Warm customer email with a salutation, one ask, and a polite hedge",
+    "structuralGate": "skip",
+    "preserve": ["salutation", "pleasantry", "ask", "warranted hedge"]
+  },
+  {
+    "id": "investor-email",
+    "context": "investor-email",
+    "shape": "Forecast email with a model-dependent revenue range",
+    "structuralGate": "skip",
+    "preserve": ["range", "assumptions", "risk language", "ask"]
+  },
+  {
+    "id": "presentation-slide",
+    "context": "slides",
+    "shape": "Title, fragments, bold labels, six compact bullets, and source line",
+    "structuralGate": "skip",
+    "preserve": ["fragments", "hierarchy", "space budget", "source line"]
+  },
+  {
+    "id": "linkedin-post",
+    "context": "linkedin",
+    "shape": "Short post with a single rhetorical hook and two specific hashtags",
+    "structuralGate": "skip",
+    "preserve": ["hook", "line breaks", "specific hashtags", "author voice"]
+  },
+  {
+    "id": "casual-slack",
+    "context": "casual",
+    "shape": "Brief internal update with fragments and shorthand",
+    "structuralGate": "skip",
+    "preserve": ["fragments", "shorthand", "warmth"]
+  },
+  {
+    "id": "short-fiction",
+    "context": "fiction",
+    "shape": "Single scene too short to support document-level inference",
+    "structuralGate": "conditional",
+    "preserve": ["point of view", "chronology", "imagery", "ending"]
+  },
+  {
+    "id": "long-fiction",
+    "context": "fiction",
+    "shape": "Sustained story with explicit theme, single-track causality, and tidy closure",
+    "structuralGate": "conditional",
+    "preserve": ["point of view", "plot", "character agency", "chronology", "ending"]
+  },
+  {
+    "id": "narrative-history",
+    "context": "narrative-nonfiction",
+    "shape": "Documented chronology with quotations and a later recontextualizing fact",
+    "structuralGate": "conditional",
+    "preserve": ["factual chronology", "quotations", "sources", "known versus inferred"]
+  },
+  {
+    "id": "second-language-essay",
+    "context": "blog",
+    "shape": "Human essay with simple vocabulary and repeated nouns",
+    "structuralGate": "conditional",
+    "preserve": ["meaning", "register", "repetition", "writer identity privacy"]
+  },
+  {
+    "id": "quoted-ai-patterns",
+    "context": "blog",
+    "shape": "Article quoting delve, tapestry, citation tokens, and placeholders as examples",
+    "structuralGate": "conditional",
+    "preserve": ["quoted examples", "code spans", "citations"]
+  },
+  {
+    "id": "legal-disclosure",
+    "context": "research",
+    "shape": "Disclosure with an accurate data cutoff and scoped limitation",
+    "structuralGate": "skip",
+    "preserve": ["cutoff", "scope", "modality", "legal meaning"]
+  },
+  {
+    "id": "human-em-dash-voice",
+    "context": "blog",
+    "shape": "Author sample intentionally uses em dashes and rhetorical questions",
+    "structuralGate": "conditional",
+    "preserve": ["author sample", "punctuation preference", "questions"]
+  }
+]

@@ -1,41 +1,42 @@
 #!/usr/bin/env bash
-# Guard against pattern-count drift. The count is a derived fact, so it lives in
-# exactly one user-facing place — the README "**NN pattern categories**" bullet —
-# and this script asserts it matches SKILL.md's detection catalog. Run in CI so
-# adding a pattern without bumping the README is a red check, not silent rot.
+# Guard against drift between the machine-readable surface catalog and README.
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-skill="$repo_root/SKILL.md"
+catalog="$repo_root/contracts/surface-categories.json"
 readme="$repo_root/README.md"
 
-# Detection categories = the `###` entries under "## What to remove or fix",
-# minus the writer-side tests (judgment checks with no detectable form):
-# paragraph-reshuffle immunity, treadmill effect, and rewrite-vs-patch.
-detection_count="$(awk '
-  /^## What to remove or fix/ { inside = 1; next }
-  /^## / { inside = 0 }
-  inside && /^### / {
-    if ($0 ~ /\(structure test\)/) next
-    if ($0 ~ /\(content test\)/) next
-    if ($0 ~ /^### When to rewrite from scratch/) next
-    n++
-  }
-  END { print n + 0 }
-' "$skill")"
+catalog_count="$(
+  python3 - "$catalog" <<'PY'
+import json
+import sys
 
-# The single user-facing count literal.
-readme_count="$(sed -n 's/.*\*\*\([0-9][0-9]*\) pattern categories\*\*.*/\1/p' "$readme" | head -n1)"
+with open(sys.argv[1], encoding="utf-8") as f:
+    data = json.load(f)
+
+categories = data.get("categories")
+if not isinstance(categories, list) or not categories:
+    raise SystemExit("surface category contract has no categories")
+if len(categories) != len(set(categories)):
+    raise SystemExit("surface category contract contains duplicate ids")
+
+print(len(categories))
+PY
+)"
+
+readme_count="$(
+  sed -n 's/.*\*\*\([0-9][0-9]*\) surface pattern categories\*\*.*/\1/p' \
+    "$readme" | head -n1
+)"
 
 if [ -z "$readme_count" ]; then
-  echo "could not find the '**NN pattern categories**' bullet in README.md" >&2
+  echo "could not find the '**NN surface pattern categories**' README bullet" >&2
   exit 1
 fi
 
-if [ "$detection_count" != "$readme_count" ]; then
-  echo "pattern-count drift: SKILL.md has $detection_count detection categories, README says $readme_count" >&2
-  echo "Update the '**NN pattern categories**' bullet in README.md to $detection_count (or fix SKILL.md)." >&2
+if [ "$catalog_count" != "$readme_count" ]; then
+  echo "surface-pattern count drift: contract=$catalog_count README=$readme_count" >&2
   exit 1
 fi
 
-echo "pattern count in sync: $detection_count"
+echo "surface pattern count in sync: $catalog_count"

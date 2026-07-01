@@ -4,6 +4,11 @@
 zero-dependency, build-step-free detection engine that scores text for
 AI-writing tells. It runs identically in Node (`>=18`) and in the browser.
 
+The score measures the configured surface-pattern load. It is not an
+authorship probability and must not be used as the sole basis for academic,
+employment, publication, or attribution decisions. The legacy
+`document_classification` field remains for API compatibility.
+
 The skill's `SKILL.md` is the human-readable catalog of rules; this engine is
 the deterministic, testable implementation of the regex-detectable subset, plus
 stylometric and AI-tool-fingerprint detectors that don't make sense as prose.
@@ -32,18 +37,30 @@ CommonJS).
 
 | Field | Type | Meaning |
 |---|---|---|
-| `score` | `0–100` | 0 = clean, 100 = heavy AI |
-| `label` | string | `Minimal` / `Some` / `Strong` / `Heavy` (or `Empty` / `Too short` / `Text too long`) |
+| `score` | `0–100` | Configured surface-pattern load |
+| `pattern_load` | string | `LOW` / `MIXED` / `HIGH` / `UNSCORED` |
+| `pattern_load_weights` | `{low, mixed, high}` | Heuristic load weights; not authorship probabilities |
+| `authorship_assessment` | `null` | Deliberately unavailable |
+| `classification_basis` | string | Always `heuristic_surface_pattern_load` |
+| `classification_warning` | string | Explicit non-authorship warning |
 | `issues[]` | `{type, text, severity, …}` | one entry per detected pattern; `type` keys map to [`CATEGORIES.md`](./CATEGORIES.md) |
 | `stats` | object | `wordCount`, per-tier counts, `contextMode`, `denseAIVocab`, normalization flags, etc. |
-| `document_classification` | string | trinary `HUMAN_ONLY` / `MIXED` / `AI_ONLY` (shape mirrors GPTZero for swap-in) |
-| `class_probabilities` | `{human, mixed, ai}` | sums to exactly 1.0 |
+| `highlight_sentence_for_patterns` | region[] | sentence spans carrying configured pattern hits |
 | `confidence_category` | `low` / `medium` / `high` | |
-| `highlight_sentence_for_ai` | region[] | sentence spans with byte offsets + per-region score, for UI highlighting |
+| `document_classification` | string | **Deprecated v2 alias.** Legacy `HUMAN_ONLY` / `MIXED` / `AI_ONLY` labels |
+| `class_probabilities` | `{human, mixed, ai}` | **Deprecated v2 alias.** Uncalibrated soft weights |
+| `highlight_sentence_for_ai` | region[] | **Deprecated v2 alias** for pattern regions |
 
-`options.contextMode` accepts `general` (default) or `technical`; technical mode
-suppresses flags that are legitimate in code-adjacent prose (e.g. Title Case
-headers). Invalid modes fall back to `general` and set `stats.contextModeFallback`.
+The deprecated v2 fields remain to avoid breaking existing integrations. Their names are
+historical and must not be presented as authorship probabilities or verdicts. New
+integrations should use `pattern_load`, `pattern_load_weights`, and
+`highlight_sentence_for_patterns`.
+
+`options.contextMode` accepts `general` (default), `technical`, `marketing`, or
+`personal`. Technical mode suppresses flags that are legitimate in code-adjacent prose
+(for example, Title Case headers). Invalid modes fall back to `general` and set
+`stats.contextModeFallback`. The detector's four coarse modes are separate from the
+skill's richer editorial profiles.
 
 ## Design notes
 

@@ -1,11 +1,11 @@
 {
   "name": "avoid-ai-writing-detector",
-  "version": "3.4.0",
-  "description": "Deterministic detection engine for the Avoid AI Writing skill — 43-category pattern + stylometric analysis of AI-generated text.",
+  "version": "4.0.0",
+  "description": "Avoid AI Writing skill package and deterministic surface-pattern detector.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/conorbronsdon/avoid-ai-writing.git"
+    "url": "https://github.com/davidcogan/avoid-ai-writing.git"
   },
   "main": "detector/patterns.js",
   "files": [
@@ -15,6 +15,14 @@
     "node": ">=18"
   },
   "scripts": {
-    "test": "node detector/patterns.test.js && node detector/categories.test.js"
+    "build": "node scripts/build-distributions.mjs --write && bash scripts/sync-plugin-skill.sh",
+    "test": "npm run test:detector && npm run test:categories && npm run test:catalog && npm run test:skill && npm run test:dist",
+    "test:detector": "node detector/patterns.test.js",
+    "test:categories": "node detector/categories.test.js",
+    "test:catalog": "bash scripts/check-pattern-count.sh",
+    "test:skill": "node tests/skill-package.test.js",
+    "test:dist": "node scripts/build-distributions.mjs --check",
+    "test:deploy": "bash tests/deploy-integration.test.sh",
+    "benchmark:performance": "node scripts/benchmark-performance.mjs --write"
   }
 }

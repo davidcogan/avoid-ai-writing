@@ -1,0 +1,182 @@
+[
+  {
+    "id": "surface-ai-heavy",
+    "group": "compatibility",
+    "request": "Rewrite this for a professional blog. Remove AI-isms and preserve every supplied fact.",
+    "text": "Certainly! Acme Analytics, a vibrant startup nestled in the heart of Boulder, raised a $40M Series B in June 2026. The platform serves as a comprehensive hub, featuring real-time dashboards and boasting query latency under one second. Moreover, this pivotal round underscores Acme's game-changing potential. Experts believe it is poised to revolutionize observability. In conclusion, the future looks bright! Feel free to reach out if you need anything else.",
+    "mustPreserve": [
+      "$40M",
+      "June 2026",
+      "Boulder",
+      "real-time dashboards",
+      "query latency under one second"
+    ],
+    "mustNotAdd": ["investors", "customers", "market size", "use of funds"],
+    "evaluationGoal": "Candidate must retain v3.8 surface-cleaning strength and exact four-section output."
+  },
+  {
+    "id": "quoted-pattern-examples",
+    "group": "compatibility",
+    "request": "Detect only. Audit the author's prose, not the quoted examples.",
+    "text": "The draft explains three common artifacts. It quotes \"Let's delve into the vibrant tapestry\" as a vocabulary example. The code block below is deliberately broken markup:\n\n```text\nciteturn0search0 [Your Name] utm_source=chatgpt.com\n```\n\nMy concern is narrower: the paragraph after those examples repeats its conclusion twice without adding evidence.",
+    "mustPreserve": ["quoted sentence", "code block", "citation token", "placeholder", "URL parameter"],
+    "mustNotAdd": ["authorship verdict"],
+    "evaluationGoal": "Both versions must honor the self-reference escape hatch; candidate should identify the actual repetition only if present."
+  },
+  {
+    "id": "customer-email",
+    "group": "compatibility",
+    "request": "Rewrite this customer email in a warm professional voice. Keep the greeting, the genuine pleasantry, and the single ask.",
+    "text": "Hi Morgan,\n\nHope you're doing well! I wanted to reach out and see if you could potentially have a few minutes to review the rollout plan before Thursday. We found two open permission issues in the staging workspace, but production is not affected.\n\nDo you have 20 minutes tomorrow afternoon?\n\nBest,\nAlex",
+    "mustPreserve": [
+      "Hi Morgan",
+      "Hope you're doing well!",
+      "Thursday",
+      "two open permission issues",
+      "staging",
+      "production is not affected",
+      "20 minutes tomorrow afternoon",
+      "Best",
+      "Alex"
+    ],
+    "mustNotAdd": ["meeting time", "root cause", "resolution"],
+    "evaluationGoal": "Candidate should remove the hedge stack without flattening the writer's warmth or changing the ask."
+  },
+  {
+    "id": "unsupported-attribution",
+    "group": "compatibility",
+    "request": "Rewrite this paragraph without inventing evidence.",
+    "text": "Industry experts agree that the new onboarding flow cuts setup time by 40%. The team has not supplied a study, benchmark, or analytics export for that number. The only verified fact is that six pilot users completed onboarding.",
+    "mustPreserve": ["40% is unsupported", "six pilot users"],
+    "mustNotAdd": ["source", "new metric", "claim that setup time improved"],
+    "evaluationGoal": "Candidate must not delete the attribution and leave the unsupported 40% claim asserted as fact."
+  },
+  {
+    "id": "technical-reference",
+    "group": "genre-protection",
+    "request": "Rewrite only genuine AI-writing problems. Context: technical documentation.",
+    "text": "## Retry Policy\n\nThe client implements a robust retry policy for transient 429 and 503 responses.\n\n- Maximum attempts\n- Exponential backoff\n- Jitter interval\n- Request timeout\n- Idempotency key\n- Retry-After header\n\nThe policy is comprehensive: it covers every retryable response currently returned by API version 2026-06-15. Do not retry 400, 401, or 403 responses. Set `maxAttempts` to 0 to disable retries.",
+    "mustPreserve": [
+      "Retry Policy heading",
+      "six noun-phrase bullets",
+      "429",
+      "503",
+      "2026-06-15",
+      "400",
+      "401",
+      "403",
+      "maxAttempts",
+      "0"
+    ],
+    "mustNotAdd": ["new response code", "implementation detail"],
+    "evaluationGoal": "Candidate should preserve legitimate technical vocabulary, exact identifiers, list form, and explicitness."
+  },
+  {
+    "id": "research-abstract",
+    "group": "genre-protection",
+    "request": "Rewrite for clarity without weakening scientific qualification. Context: research.",
+    "text": "In this observational study of 84 teams, higher review participation was associated with a 6% lower median rollback rate (95% CI, 1%-11%). Because assignment was not randomized, the result may reflect team maturity rather than a causal effect of review participation. These findings could potentially inform a preregistered trial, but they do not establish that increasing review participation will reduce rollbacks.",
+    "mustPreserve": [
+      "observational",
+      "84 teams",
+      "associated",
+      "6%",
+      "95% CI",
+      "1%-11%",
+      "not randomized",
+      "may reflect",
+      "do not establish causality"
+    ],
+    "mustNotAdd": ["causal claim", "statistical significance", "recommendation to increase review"],
+    "evaluationGoal": "Candidate may remove the redundant hedge stack but must preserve material uncertainty and study design."
+  },
+  {
+    "id": "slide-copy",
+    "group": "genre-protection",
+    "request": "Clean this slide copy. Preserve the slide format and source line.",
+    "text": "# Enterprise rollout readiness\n\n- 84% weekly active developers\n- Two unresolved SSO blockers\n- France pilot starts July 14\n- Procurement review is still open\n- Support coverage confirmed for launch week\n- Decision needed by Friday\n\n**Next step:** Name an owner for the two SSO blockers.\n\nSource: workspace telemetry, June 1-30, 2026",
+    "mustPreserve": [
+      "title",
+      "six bullets",
+      "84%",
+      "two SSO blockers",
+      "July 14",
+      "Friday",
+      "bold Next step label",
+      "source line",
+      "June 1-30, 2026"
+    ],
+    "mustNotAdd": ["paragraph prose", "new recommendation"],
+    "evaluationGoal": "Candidate should make no change or only a surgical one; it must not apply blog list/structure rules."
+  },
+  {
+    "id": "author-em-dash-voice",
+    "group": "genre-protection",
+    "request": "Rewrite lightly and match this explicit author preference: I use em dashes and occasional rhetorical questions.",
+    "text": "The migration looked simple — until we tested the old billing export. What broke? Three customer IDs had been recycled after deletion, so the join attached 2024 invoices to the wrong accounts. We stopped the backfill, restored the snapshot, and added a uniqueness check. The fix is plain — IDs that appear in financial exports can never be reused.",
+    "mustPreserve": [
+      "two em dashes",
+      "rhetorical question",
+      "three customer IDs",
+      "2024 invoices",
+      "snapshot",
+      "uniqueness check",
+      "IDs can never be reused"
+    ],
+    "mustNotAdd": ["different cause", "new remediation"],
+    "evaluationGoal": "Candidate should defer to the supplied voice and avoid editing a clean human passage."
+  },
+  {
+    "id": "strategy-memo-structure",
+    "group": "structural",
+    "request": "Detect only. Run a deep structural audit of this strategy memo.",
+    "text": "Adoption slowed because teams do not understand the new permissions model. The clearest solution is more training.\n\nSupport tickets mention permissions in 38% of onboarding cases. This shows that confusion about permissions is the central adoption problem. The other ticket categories are billing at 24%, editor performance at 21%, and miscellaneous issues at 17%.\n\nInterview notes also support the training thesis. Three administrators asked for a permissions walkthrough. Two developers, however, said build latency kept them from enabling the product on larger repositories. One security lead paused deployment until the vendor-risk review is complete.\n\nTraining will resolve the adoption slowdown because it addresses the main source of uncertainty. A webinar, an admin guide, and office hours will give every team what it needs.\n\nUltimately, the key is education. Once teams understand permissions, adoption will recover.",
+    "mustPreserve": [
+      "38%",
+      "24%",
+      "21%",
+      "17%",
+      "three administrators",
+      "two developers",
+      "one security lead",
+      "training is a hypothesis"
+    ],
+    "mustNotAdd": ["new cause", "new evidence", "rewritten memo"],
+    "evaluationGoal": "Candidate should expose causal compression, ignored counterevidence, repeated thesis, and over-resolved closure without rewriting in detect mode."
+  },
+  {
+    "id": "fiction-structure",
+    "group": "structural",
+    "request": "Detect only. Context: fiction. Run the structural audit, but do not prescribe plot changes as automatic fixes.",
+    "text": "Mara understood at last that courage meant accepting help. Her chest tightened, her palms went cold, and rain pressed against the windows as if the house itself shared her fear. She called her brother. He answered on the first ring, drove through the storm, and repaired the generator. The lights returned. Mara smiled because she had learned that nobody survives alone. The storm had taught her the value of trust, and from that night forward she never refused help again.",
+    "mustPreserve": ["Mara", "brother", "generator", "storm", "ending", "fictional facts"],
+    "mustNotAdd": ["subplot", "flashback", "ambiguity", "different ending"],
+    "evaluationGoal": "Candidate should flag thematic over-explanation, embodiment stacking, and tidy closure as judgments while avoiding authorship claims or automatic plot prescriptions."
+  },
+  {
+    "id": "narrative-nonfiction",
+    "group": "structural",
+    "request": "Detect only. Context: narrative nonfiction. Preserve factual chronology and quotation boundaries.",
+    "text": "At 9:12 a.m., the deployment monitor turned red. The team first blamed the database migration because it had finished seven minutes earlier. \"Roll it back,\" Priya said in the incident channel. At 9:26, the rollback completed, but the error rate kept rising. Only then did the team inspect the certificate logs and find that the signing key had expired at 9:10. The earlier timing made the migration look causal; the later evidence reversed that interpretation.",
+    "mustPreserve": [
+      "9:12 a.m.",
+      "seven minutes",
+      "Priya quote",
+      "9:26",
+      "9:10",
+      "migration was not causal",
+      "factual chronology"
+    ],
+    "mustNotAdd": ["dialogue", "cause", "event"],
+    "evaluationGoal": "Candidate should recognize existing recontextualization and leave it alone rather than adding suspense or complexity."
+  },
+  {
+    "id": "second-language-human",
+    "group": "structural",
+    "request": "Rewrite only clear reader-facing problems. Do not infer the writer's background or manufacture idioms.",
+    "text": "Our team uses the checklist because the checklist keeps the release steps visible. The checklist is simple. Every engineer can see which step is finished and which step is waiting. Before we used it, sometimes two engineers did the same step. Now this happens less. I prefer the repeated word checklist because it is the name of the document.",
+    "mustPreserve": ["repeated word checklist", "simple register", "every factual claim", "first person"],
+    "mustNotAdd": ["slang", "idiom", "invented metric", "writer-background inference"],
+    "evaluationGoal": "Candidate should preserve deliberate repetition and make at most minimal grammar edits."
+  }
+]

@@ -4,42 +4,67 @@ on:
   pull_request:
     paths:
       - "SKILL.md"
+      - "references/**"
+      - "contracts/**"
+      - "tests/**"
+      - "detector/**"
+      - "dist/**"
+      - "cursor-rules/**"
       - "README.md"
       - "plugins/**"
       - ".claude-plugin/**"
       - "scripts/**"
+      - "package.json"
   push:
     branches: [main]
     paths:
       - "SKILL.md"
+      - "references/**"
+      - "contracts/**"
+      - "tests/**"
+      - "detector/**"
+      - "dist/**"
+      - "cursor-rules/**"
       - "README.md"
       - "plugins/**"
       - ".claude-plugin/**"
       - "scripts/**"
+      - "package.json"
 
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
 
       - name: Validate manifest JSON
         run: |
           python3 -m json.tool .claude-plugin/marketplace.json > /dev/null
           python3 -m json.tool plugins/avoid-ai-writing/.claude-plugin/plugin.json > /dev/null
+          python3 -m json.tool contracts/public-contract.json > /dev/null
+          python3 -m json.tool contracts/surface-categories.json > /dev/null
 
-      - name: Check README pattern count matches SKILL.md
+      - name: Check README surface-pattern count
         run: bash scripts/check-pattern-count.sh
 
-      - name: Regenerate bundled skill + check version
-        run: bash scripts/sync-plugin-skill.sh
+      - name: Regenerate distributions
+        run: npm run build
 
-      - name: Fail if the bundled skill drifted from SKILL.md
+      - name: Run full validation
+        run: npm test
+
+      - name: Test deployment and rollback transaction
+        run: npm run test:deploy
+
+      - name: Fail if generated distributions drifted
         run: |
-          if ! git diff --quiet; then
-            echo "::error::plugins/avoid-ai-writing/skills/avoid-ai-writing/SKILL.md is out of sync with the root SKILL.md."
-            echo "Run 'bash scripts/sync-plugin-skill.sh' and commit the result."
-            git --no-pager diff --stat
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::Generated distributions are out of sync."
+            echo "Run 'npm run build' and commit the result."
+            git status --short
             exit 1
           fi
-          echo "bundled skill is in sync"
+          echo "generated distributions are in sync"

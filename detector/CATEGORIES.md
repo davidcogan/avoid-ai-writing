@@ -1,26 +1,22 @@
-# Category map: SKILL.md ↔ detector
+# Category map: runtime references ↔ detector
 
 This table is the anti-drift contract between the human-readable rules in
-`../SKILL.md` and the executable engine in `patterns.js`. When you add a rule to
-the skill, decide here whether it's regex-detectable (give it a detector `type`)
-or LLM-only judgment (mark it so). When you add a detector `type`, point it back
-at the skill section it enforces.
+`../references/PATTERN-CATALOG.md`, the structural audit, and the executable
+engine in `patterns.js`. When you add a rule, decide here whether it is
+regex-detectable (give it a detector `type`) or LLM-only judgment (mark it so).
+When you add a detector `type`, point it back at the catalog section it enforces.
 
 The engine exposes 43 issue `type`s (see `TYPE_LABELS` in `patterns.js`). The
-skill has more `###` sections than that — the gap is **not** missing coverage,
-it's rules that are judgment calls a regex can't make. The three groups below
-account for every entry on both sides.
+runtime package contains more editorial checks because some require semantic or
+document-level judgment. The gap is intentional.
 
-Three counts coexist on purpose and should not be forced to match: the README's
-**pattern-category count** (the human-facing prose catalog, derived from SKILL.md
-and guarded in CI), the engine's **43 `type`s** (which split the vocabulary tiers
-and add stylometric signals), and SKILL.md's `###` sections (which also include
-writer-side tests with no detectable form). The
-`categories.test.js` check enforces only the engine ↔ this-file mapping.
+The README's 47 surface categories, the engine's 43 `type`s, and the semantic
+structural checks are different inventories. Do not force them to match.
+`categories.test.js` enforces only the engine ↔ this-file mapping.
 
-## A. Direct mapping (skill rule → detector `type`)
+## A. Direct mapping (catalog rule → detector `type`)
 
-| Detector `type` | Label | SKILL.md section |
+| Detector `type` | Label | Pattern catalog section |
 |---|---|---|
 | `tier1` / `tier2` / `tier3` | AI vocabulary / Word cluster / Overused word | Words and phrases to replace |
 | `transition` | AI transition | Transition phrases to remove or rewrite |
@@ -94,6 +90,16 @@ mistake their absence for a coverage gap:
 - Severity tiers (P0 / P1 / P2)
 - Self-reference escape hatch
 - Output format
+- Inference budget
+- Causal compression
+- Ambiguity quality
+- Recontextualization
+- Closure honesty
+- Embodiment stack
+- External-world anchors
+- Reader model
+- Choice repertoire (batch-level)
+- Structural-consent and fact-preservation gates
 
 > **Partial:** the skill's **Context profiles / Tolerance matrix / Auto-detection
 > cues** are partly realized by the engine's `options.contextMode`
