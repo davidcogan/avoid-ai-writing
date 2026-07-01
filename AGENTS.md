@@ -2,8 +2,8 @@
 
 ## Product
 
-This repository contains the `avoid-ai-writing` Agent Skill, its deterministic surface
-detector, generated distributions, and compatibility tests.
+This repository contains the `avoid-ai-writing` Cursor Agent Skill, its deterministic
+surface detector, generated Cursor installation artifacts, and compatibility tests.
 
 The public skill name, modes, flags, legacy profiles, and output headings are a compatibility
 contract. See `contracts/public-contract.json`.
@@ -14,14 +14,13 @@ contract. See `contracts/public-contract.json`.
 - `references/PATTERN-CATALOG.md`: surface patterns and severity.
 - `references/PROFILES.md`: context and voice behavior.
 - `references/STRUCTURAL-AUDIT.md`: permissioned document-level audit.
-- `detector/patterns.js`: deterministic surface detector.
+- `detector/patterns.js`: optional deterministic surface detector.
 - `contracts/`: machine-readable public and category inventories.
 
 Generated files:
 
-- `dist/avoid-ai-writing-standalone.md`;
-- `cursor-rules/avoid-ai-writing.mdc`;
-- `plugins/avoid-ai-writing/skills/avoid-ai-writing/`.
+- `dist/avoid-ai-writing-runtime.md`;
+- `dist/avoid-ai-writing-standalone.md`.
 
 Do not edit generated files directly.
 
@@ -52,6 +51,8 @@ Do not edit generated files directly.
 ```bash
 npm run build
 npm test
+npm run test:deploy
 ```
 
-Node 18+ is required. No package installation is needed.
+Node 18+, Bash, and Python 3 are required for repository development. The installed Cursor
+skill itself has no runtime dependencies.

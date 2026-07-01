@@ -4,6 +4,21 @@ All notable changes to this project are documented here.
 
 ---
 
+## [4.0.1] — 2026-07-01
+
+### Changed
+- Reoriented the repository around Cursor as the only supported harness.
+- Rewrote the README with user-level and project-level Cursor installation instructions.
+- Documented the generated runtime and standalone distributions, their tradeoffs, and which one to install.
+- Replaced harness-specific repository guidance with `AGENTS.md`.
+
+### Removed
+- The ambient `.mdc` rule distribution.
+- Non-Cursor plugin and marketplace packaging.
+- Cross-harness metadata, documentation, synchronization code, and tests.
+
+---
+
 ## [4.0.0] — 2026-07-01
 
 ### Added
@@ -12,8 +27,8 @@ All notable changes to this project are documented here.
 - **Preservation contract** — explicit fact, source, quotation, citation, code, identifier, modality, negation, and scope verification. Missing evidence now yields `source or author input needed`, never an invented replacement.
 - **Structural consent** — `--depth structural` is additive; global changes to order, chronology, thesis, evidence, point of view, or ending require approval.
 - **Progressive disclosure** — the runtime skill is split into a concise `SKILL.md` and three directly linked references.
-- **Package contracts and tests** — machine-readable public-interface and surface-category contracts, genre-gate fixtures, reference validation, plugin parity, generated-distribution checks, and damaged-character rejection.
-- **Generated distributions** — a standalone single-file skill and flattened Cursor rule are built from canonical modular sources.
+- **Package contracts and tests** — machine-readable public-interface and surface-category contracts, genre-gate fixtures, reference validation, generated-distribution checks, and damaged-character rejection.
+- **Generated distributions** — optimized and standalone Cursor skill files are built from canonical modular sources.
 - **Optimized user runtime** — surface rules and profiles are embedded into one smaller default payload; the structural module remains an on-demand reference.
 - **Safe detector fields** — `pattern_load`, `pattern_load_weights`, a null `authorship_assessment`, and an explicit classification warning. Legacy v2 authorship-named fields remain deprecated aliases for compatibility.
 
@@ -22,8 +37,7 @@ All notable changes to this project are documented here.
 - Replaced overconfident claims about structure, vocabulary frequency, TTR, two-pass convergence, and detector certainty with scoped editorial guidance.
 - Severity now reflects reader and publishing risk rather than confidence about AI authorship.
 - Voice/context precedence now protects facts and explicit user intent before generic strictness.
-- Plugin synchronization now includes all reference files.
-- Direct-install documentation now uses the standalone distribution, preventing duplicate discovery from cloning the complete source repository into a skills directory.
+- Direct-install documentation uses generated distributions, preventing duplicate discovery from cloning the complete source repository into a skills directory.
 
 ### Research
 - Structural checks were informed by Russell et al., *StoryScope: Investigating idiosyncrasies in AI fiction* (arXiv:2604.03136v4, 2026). The skill documents the study's fiction-only scope, benchmark construction, and limits on transfer.
@@ -185,18 +199,6 @@ All notable changes to this project are documented here.
 
 ---
 
-## [2.2.0] — 2026-03-18
-
-### Added
-- OpenClaw compatibility — added `version` and `metadata.openclaw` to SKILL.md frontmatter
-- OpenClaw installation instructions in README (ClawHub and manual)
-- Skill now works with both Claude Code and OpenClaw from a single `SKILL.md`
-
-### Changed
-- `README.md` — broadened description to reference both platforms, reorganized installation into Claude Code and OpenClaw sections
-
----
-
 ## [2.1.0] — 2026-03-18
 
 ### Added
@@ -205,7 +207,7 @@ All notable changes to this project are documented here.
 - New "When to rewrite from scratch vs. patch" threshold — advises full rewrites when AI density is too high for patching
 - 5 rewrite principles in tone calibration section (vary length, be concrete, have a voice, cut neutrality, earn emphasis)
 - New "Meta Patterns" group in README pattern table
-- Expanded credits: OpenClaw humanizer ecosystem (community patterns)
+- Expanded credits for community humanizer patterns
 
 ### Changed
 - Pattern count: 23 → 30 categories
@@ -275,7 +277,7 @@ All notable changes to this project are documented here.
 ## [1.0.0] — 2026-03-05
 
 ### Added
-- `SKILL.md` — Claude Code skill with 13 pattern categories: formatting, sentence structure, word/phrase replacements (38 entries), template phrases, transition phrases, structural issues, significance inflation, copula avoidance, synonym cycling, vague attributions, filler phrases, generic conclusions, chatbot artifacts
+- `SKILL.md` — initial skill with 13 pattern categories: formatting, sentence structure, word/phrase replacements (38 entries), template phrases, transition phrases, structural issues, significance inflation, copula avoidance, synonym cycling, vague attributions, filler phrases, generic conclusions, chatbot artifacts
 - Four-section output format: issues found, rewritten version, what changed, second-pass audit
 - `README.md` — installation guide (3 methods), full pattern reference, usage examples
 - `LICENSE` — MIT

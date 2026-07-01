@@ -29,8 +29,8 @@ Version 4 was evaluated against the frozen v3.8 behavior with synthetic fixtures
 
 See [`performance.json`](./performance.json).
 
-- Default surface payload: 27.9% smaller than v3.8.
-- Explicit structural total: 9.2% smaller than v3.8.
+- Default surface payload: 28.3% smaller than v3.8.
+- Explicit structural total: 9.6% smaller than v3.8.
 - Detector microbenchmark: no measurable regression.
 
 ## Public fixtures

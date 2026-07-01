@@ -1,26 +1,26 @@
 {
-  "capturedAt": "2026-07-01T15:40:38.586Z",
+  "capturedAt": "2026-07-01T16:05:48.962Z",
   "contextPayload": {
     "currentV3Bytes": 58508,
-    "candidateDefaultSurfaceBytes": 42197,
+    "candidateDefaultSurfaceBytes": 41956,
     "candidateStructuralReferenceBytes": 10934,
-    "candidateStructuralTotalBytes": 53131,
-    "defaultSurfaceChangePercent": -27.87823887331647,
-    "explicitStructuralChangePercent": -9.190196212483762,
+    "candidateStructuralTotalBytes": 52890,
+    "defaultSurfaceChangePercent": -28.290148355780403,
+    "explicitStructuralChangePercent": -9.6021056949477,
     "approximateTokens": {
       "method": "UTF-8 bytes divided by 4; directional estimate only",
       "currentV3": 14627,
-      "candidateDefaultSurface": 10549,
-      "candidateWithStructural": 13283
+      "candidateDefaultSurface": 10489,
+      "candidateWithStructural": 13223
     }
   },
   "detector": {
     "sampleWords": 64,
     "iterationsPerRound": 1000,
     "rounds": 7,
-    "currentV3MedianMs": 45.688333,
-    "candidateV4MedianMs": 45.684292,
-    "changePercent": -0.008844708779374483,
+    "currentV3MedianMs": 49.688375,
+    "candidateV4MedianMs": 49.597875,
+    "changePercent": -0.18213515736829528,
     "note": "Local microbenchmark only. End-to-end model latency depends on provider, load, and output length."
   },
   "runtimeLoading": {

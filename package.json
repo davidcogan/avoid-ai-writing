@@ -1,7 +1,7 @@
 {
   "name": "avoid-ai-writing-detector",
-  "version": "4.0.0",
-  "description": "Avoid AI Writing skill package and deterministic surface-pattern detector.",
+  "version": "4.0.1",
+  "description": "Cursor Agent Skill package and deterministic surface-pattern detector for avoiding AI-writing patterns.",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -15,7 +15,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "build": "node scripts/build-distributions.mjs --write && bash scripts/sync-plugin-skill.sh",
+    "build": "node scripts/build-distributions.mjs --write",
     "test": "npm run test:detector && npm run test:categories && npm run test:catalog && npm run test:skill && npm run test:dist",
     "test:detector": "node detector/patterns.test.js",
     "test:categories": "node detector/categories.test.js",

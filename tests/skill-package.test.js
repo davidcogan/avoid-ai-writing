@@ -195,26 +195,10 @@ test('runtime source files contain no replacement characters', () => {
   }
 });
 
-test('plugin bundle is byte-identical to runtime source files', () => {
-  const files = [
-    'SKILL.md',
-    'references/PATTERN-CATALOG.md',
-    'references/PROFILES.md',
-    'references/STRUCTURAL-AUDIT.md',
-  ];
-  for (const file of files) {
-    const bundled = path.join('plugins/avoid-ai-writing/skills/avoid-ai-writing', file);
-    assert.ok(fs.existsSync(path.join(root, bundled)), `missing bundled file: ${bundled}`);
-    assert.equal(read(file), read(bundled), `bundled file drifted: ${file}`);
-  }
-});
-
 test('release metadata versions stay synchronized', () => {
   const packageJson = JSON.parse(read('package.json'));
-  const pluginJson = JSON.parse(read('plugins/avoid-ai-writing/.claude-plugin/plugin.json'));
   const surfaceCategories = JSON.parse(read('contracts/surface-categories.json'));
   assert.equal(packageJson.version, contract.version);
-  assert.equal(pluginJson.version, contract.version);
   assert.equal(surfaceCategories.version, contract.version);
   assert.equal(surfaceCategories.categories.length, 47);
   assert.equal(frontmatterValue(skill, 'version'), contract.version);
@@ -223,19 +207,29 @@ test('release metadata versions stay synchronized', () => {
 test('flattened distributions include all required modules', () => {
   const runtime = read('dist/avoid-ai-writing-runtime.md');
   const standalone = read('dist/avoid-ai-writing-standalone.md');
-  const cursorRule = read('cursor-rules/avoid-ai-writing.mdc');
   assert.ok(runtime.includes('# Pattern catalog'));
   assert.ok(runtime.includes('# Context and voice profiles'));
   assert.ok(!runtime.includes('# Structural audit'));
   assert.ok(runtime.includes('./references/STRUCTURAL-AUDIT.md'));
   assert.ok(!runtime.includes('\uFFFD'));
-  for (const text of [standalone, cursorRule]) {
-    assert.ok(text.includes('# Pattern catalog'));
-    assert.ok(text.includes('# Context and voice profiles'));
-    assert.ok(text.includes('# Structural audit'));
-    assert.ok(!text.includes('\uFFFD'));
+  assert.ok(standalone.includes('# Pattern catalog'));
+  assert.ok(standalone.includes('# Context and voice profiles'));
+  assert.ok(standalone.includes('# Structural audit'));
+  assert.ok(!standalone.includes('\uFFFD'));
+});
+
+test('public package is Cursor-only', () => {
+  const files = [
+    'SKILL.md',
+    'README.md',
+    'AGENTS.md',
+    'package.json',
+    'scripts/build-distributions.mjs',
+  ];
+  const forbidden = /\b(?:Claude|Cowork|OpenClaw|Hermes|Codex)\b|cursor-rules|claude-plugin/i;
+  for (const file of files) {
+    assert.ok(!forbidden.test(read(file)), `${file} contains a non-Cursor distribution reference`);
   }
-  assert.ok(cursorRule.includes(`v${contract.version}`));
 });
 
 test('surface catalog keeps the major legacy rule families', () => {
