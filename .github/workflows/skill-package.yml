@@ -1,4 +1,4 @@
-name: plugin-skill-sync
+name: skill-package
 
 on:
   pull_request:
@@ -9,12 +9,11 @@ on:
       - "tests/**"
       - "detector/**"
       - "dist/**"
-      - "cursor-rules/**"
       - "README.md"
-      - "plugins/**"
-      - ".claude-plugin/**"
+      - "AGENTS.md"
       - "scripts/**"
       - "package.json"
+      - ".github/workflows/skill-package.yml"
   push:
     branches: [main]
     paths:
@@ -24,12 +23,11 @@ on:
       - "tests/**"
       - "detector/**"
       - "dist/**"
-      - "cursor-rules/**"
       - "README.md"
-      - "plugins/**"
-      - ".claude-plugin/**"
+      - "AGENTS.md"
       - "scripts/**"
       - "package.json"
+      - ".github/workflows/skill-package.yml"
 
 jobs:
   check:
@@ -40,17 +38,15 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Validate manifest JSON
+      - name: Validate contract JSON
         run: |
-          python3 -m json.tool .claude-plugin/marketplace.json > /dev/null
-          python3 -m json.tool plugins/avoid-ai-writing/.claude-plugin/plugin.json > /dev/null
           python3 -m json.tool contracts/public-contract.json > /dev/null
           python3 -m json.tool contracts/surface-categories.json > /dev/null
 
       - name: Check README surface-pattern count
         run: bash scripts/check-pattern-count.sh
 
-      - name: Regenerate distributions
+      - name: Regenerate Cursor distributions
         run: npm run build
 
       - name: Run full validation
@@ -62,9 +58,9 @@ jobs:
       - name: Fail if generated distributions drifted
         run: |
           if [ -n "$(git status --porcelain)" ]; then
-            echo "::error::Generated distributions are out of sync."
+            echo "::error::Generated Cursor distributions are out of sync."
             echo "Run 'npm run build' and commit the result."
             git status --short
             exit 1
           fi
-          echo "generated distributions are in sync"
+          echo "generated Cursor distributions are in sync"

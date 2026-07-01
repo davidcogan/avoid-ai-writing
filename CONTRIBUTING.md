@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping improve this skill. It teaches an LLM (and now a deterministic
+Thanks for helping improve this Cursor skill. It teaches an agent (and an optional deterministic
 engine) to spot and fix AI-writing tells. Contributions are welcome — a few things
 keep the project coherent.
 
@@ -16,7 +16,8 @@ keep the project coherent.
 | `detector/CATEGORIES.md` | The map between catalog rules and detector `type`s. Keep it current. |
 | `contracts/` | Public interface and surface-category inventories. |
 | `tests/` | Package, compatibility, and genre-gate fixtures. |
-| `dist/`, `cursor-rules/`, `plugins/` | Generated distributions. |
+| `dist/avoid-ai-writing-runtime.md` | Recommended generated Cursor runtime. |
+| `dist/avoid-ai-writing-standalone.md` | Optional generated one-file Cursor runtime. |
 
 ## Adding or changing a rule
 
@@ -57,10 +58,9 @@ npm run build
 npm test
 ```
 
-The build command refreshes generated distributions. The test command runs
-detector fixtures, category mapping, public-contract checks, package parity,
-genre-gate coverage, and generated-file checks. No dependencies to install;
-Node 18+ only.
+The build command refreshes both Cursor distributions. The test command runs
+detector fixtures, category mapping, public-contract checks, genre-gate coverage,
+and generated-file checks. Repository development requires Node 18+, Bash, and Python 3.
 
 ## Write clean prose
 
@@ -75,4 +75,4 @@ its own.
 Add an entry to `CHANGELOG.md` under a dated, versioned heading
 (`## [X.Y.Z] - YYYY-MM-DD`), matching the existing entries. Update the version
 in `SKILL.md`, `contracts/public-contract.json`, `contracts/surface-categories.json`,
-`package.json`, and the plugin manifest, then regenerate distributions.
+and `package.json`, then regenerate distributions.

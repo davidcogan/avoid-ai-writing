@@ -15,7 +15,7 @@ Desktop.ini
 .env
 .env.local
 
-# Local git worktrees (parallel Claude Code sessions)
+# Local git worktrees (parallel Cursor sessions)
 .worktrees/
 
 # Local evaluation and rollout artifacts

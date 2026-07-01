@@ -18,21 +18,6 @@ function read(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), 'utf8').replace(/\r\n/g, '\n');
 }
 
-function stripFrontmatter(markdown) {
-  if (!markdown.startsWith('---\n')) return markdown;
-  const end = markdown.indexOf('\n---\n', 4);
-  if (end < 0) throw new Error('SKILL.md frontmatter is not closed');
-  return markdown.slice(end + 5);
-}
-
-function frontmatterValue(markdown, key) {
-  const end = markdown.indexOf('\n---\n', 4);
-  const frontmatter = markdown.slice(0, end);
-  const match = frontmatter.match(new RegExp(`^${key}:\\s*(.+)$`, 'm'));
-  if (!match) throw new Error(`SKILL.md frontmatter is missing ${key}`);
-  return match[1].replace(/^["']|["']$/g, '');
-}
-
 function anchorLinks(markdown) {
   return markdown
     .replaceAll('./references/PATTERN-CATALOG.md', '#pattern-catalog')
@@ -51,7 +36,6 @@ function runtimeLinks(markdown) {
 }
 
 const skill = read('SKILL.md');
-const version = frontmatterValue(skill, 'version');
 const patternCatalog = read('references/PATTERN-CATALOG.md');
 const profiles = read('references/PROFILES.md');
 const structuralAudit = read('references/STRUCTURAL-AUDIT.md');
@@ -64,18 +48,9 @@ const runtimeAppendix = [patternCatalog, profiles]
   .join('');
 const runtime = `${runtimeLinks(skill).trim()}\n${runtimeAppendix}`;
 
-const cursorFrontmatter = `---
-description: Audit and rewrite prose to remove AI-writing patterns while preserving facts, intent, voice, and genre conventions. Supports detect, rewrite, edit-in-place, context and voice profiles, plus a permissioned structural audit. Cursor port of avoid-ai-writing v${version}.
-globs: ["**/*.md", "**/*.mdx", "**/*.txt", "**/*.rst", "**/*.adoc"]
-alwaysApply: false
----`;
-
-const cursorRule = `${cursorFrontmatter}\n\n${anchorLinks(stripFrontmatter(skill)).trim()}\n${appendix}`;
-
 const outputs = new Map([
   ['dist/avoid-ai-writing-runtime.md', runtime],
   ['dist/avoid-ai-writing-standalone.md', standalone],
-  ['cursor-rules/avoid-ai-writing.mdc', cursorRule],
 ]);
 
 let failed = false;

@@ -3,6 +3,10 @@ set -euo pipefail
 shopt -s nullglob
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+candidate_version="$(
+  sed -n '/^---[[:space:]]*$/,/^---[[:space:]]*$/ s/^version:[[:space:]]*//p' \
+    "$repo_root/SKILL.md" | head -n1 | tr -d '\r'
+)"
 tmp="$(mktemp -d)"
 
 cleanup() {
@@ -75,7 +79,7 @@ assert "# Structural audit" not in runtime
 assert "./references/STRUCTURAL-AUDIT.md" in runtime
 PY
 
-backups=("$backup_root"/avoid-ai-writing-pre-v4.0.0-*)
+backups=("$backup_root"/avoid-ai-writing-pre-v"${candidate_version}"-*)
 if [ "${#backups[@]}" != "1" ] || [ ! -d "${backups[0]}" ]; then
   echo "expected exactly one rollback backup" >&2
   exit 1
