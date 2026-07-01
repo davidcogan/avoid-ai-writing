@@ -23,7 +23,7 @@ if (!baselineRoot) {
 }
 
 const baselineSkillPath = path.join(baselineRoot, 'SKILL.md');
-const runtimePath = path.join(root, 'dist', 'avoid-ai-writing-runtime.md');
+const runtimePath = path.join(root, 'SKILL.md');
 const structuralPath = path.join(root, 'references', 'STRUCTURAL-AUDIT.md');
 
 const baselineBytes = fs.statSync(baselineSkillPath).size;

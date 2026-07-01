@@ -8,23 +8,22 @@ keep the project coherent.
 
 | Path | What it holds |
 |------|---------------|
-| `SKILL.md` | Public contract, safety gates, modes, workflow, and output format. |
-| `references/PATTERN-CATALOG.md` | Human-readable surface catalog and severity guide. |
-| `references/PROFILES.md` | Context and voice profiles. |
+| `src/skill-router.md` | Canonical public contract, safety gates, modes, workflow, and output format. |
+| `src/pattern-catalog.md` | Canonical surface catalog and severity guide. |
+| `src/profiles.md` | Canonical context and voice profiles. |
 | `references/STRUCTURAL-AUDIT.md` | Permissioned document-level checks. |
+| `SKILL.md` | Generated, directly installable Cursor skill. |
 | `detector/patterns.js` | The deterministic engine — the executable subset of the rules. |
 | `detector/CATEGORIES.md` | The map between catalog rules and detector `type`s. Keep it current. |
 | `contracts/` | Public interface and surface-category inventories. |
 | `tests/` | Package, compatibility, and genre-gate fixtures. |
-| `dist/avoid-ai-writing-runtime.md` | Recommended generated Cursor runtime. |
-| `dist/avoid-ai-writing-standalone.md` | Optional generated one-file Cursor runtime. |
 
 ## Adding or changing a rule
 
 First decide which kind of rule it is:
 
 - **Regex-detectable** (a phrase, a character, a structural shape) → add it to
-  `references/PATTERN-CATALOG.md`, add the detection to `detector/patterns.js`
+  `src/pattern-catalog.md`, add the detection to `detector/patterns.js`
   with a new `type`, and add a row to `detector/CATEGORIES.md`. Cover it with a fixture in
   `detector/patterns.test.js` (both a true positive and a case that must *not*
   fire).
@@ -58,7 +57,7 @@ npm run build
 npm test
 ```
 
-The build command refreshes both Cursor distributions. The test command runs
+The build command refreshes the root `SKILL.md`. The test command runs
 detector fixtures, category mapping, public-contract checks, genre-gate coverage,
 and generated-file checks. Repository development requires Node 18+, Bash, and Python 3.
 
@@ -67,12 +66,12 @@ and generated-file checks. Repository development requires Node 18+, Bash, and P
 This repo polices writing quality, so the prose you add has to clear the same
 bar. Run your additions through the skill itself. Keep rule bullets terse and
 lead with the directive — match the length and tone of the bullets already in
-`SKILL.md`. Drop intensifiers like "strong" or "powerful"; let the rule stand on
+`src/skill-router.md`. Drop intensifiers like "strong" or "powerful"; let the rule stand on
 its own.
 
 ## Changelog and versioning
 
 Add an entry to `CHANGELOG.md` under a dated, versioned heading
 (`## [X.Y.Z] - YYYY-MM-DD`), matching the existing entries. Update the version
-in `SKILL.md`, `contracts/public-contract.json`, `contracts/surface-categories.json`,
-and `package.json`, then regenerate distributions.
+in `src/skill-router.md`, `contracts/public-contract.json`,
+`contracts/surface-categories.json`, and `package.json`, then rebuild `SKILL.md`.
