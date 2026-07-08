@@ -1,7 +1,7 @@
 ---
 name: avoid-ai-writing
-description: Cursor Agent Skill that audits and rewrites content to remove AI writing patterns ("AI-isms") while preserving facts, intent, voice, and genre conventions. Use when asked to remove AI-isms, clean up AI writing, audit writing for AI tells, make text sound less like AI, or perform a deeper structural writing audit. Supports detect-only, rewrite, and edit-in-place modes; context and voice profiles; and an optional permissioned structural pass.
-version: 4.0.2
+description: Audits and rewrites content to remove AI writing patterns ("AI-isms") while preserving facts, intent, voice, and genre conventions. Use when asked to humanize AI-sounding text, remove AI-isms, clean up AI slop, make text sound less like AI or ChatGPT, audit writing for AI tells, or run a deeper structural writing audit. Supports detect-only, rewrite, and edit-in-place modes; context and voice profiles; and an optional permissioned structural pass.
+version: 4.1.0
 license: MIT
 metadata:
   author: Conor Bronsdon
@@ -40,8 +40,6 @@ or attribution verdicts.
 
 ## Modes
 
-The public modes and defaults remain:
-
 - **`rewrite`** (default): identify in-scope issues, rewrite the text, summarize meaningful
   changes, and run a corrective second pass.
 - **`detect`**: identify issues without rewriting. Separate clear editorial problems from
@@ -53,6 +51,7 @@ The public modes and defaults remain:
 Natural language is enough:
 
 - "Remove AI-isms from this post."
+- "Humanize this draft."
 - "Rewrite this in a blunt voice for LinkedIn."
 - "Edit `post.md` in place."
 - "Scan this, but do not rewrite it."
@@ -69,12 +68,12 @@ Power-user options:
 --iterate N
 ```
 
-`--depth surface` is the compatibility default. `--depth structural` authorizes analysis
-of document-level organization but not silent global restructuring.
+`--depth surface` is the default. `--depth structural` authorizes analysis of
+document-level organization but not silent global restructuring.
 
-`--iterate N` is capped at 2 for compatibility. The built-in corrective pass counts as the
-second pass. Report `converged in 2 passes` only when no remaining **in-scope** issue is
-found; do not imply that the text is proven human or undetectable.
+`--iterate N` is capped at 2. The built-in corrective pass counts as the second pass.
+Report `converged in 2 passes` only when no remaining **in-scope** issue is found; do not
+imply that the text is proven human or undetectable.
 
 Mode triggers:
 
@@ -82,19 +81,16 @@ Mode triggers:
 - Use `edit` when the writer names a file and asks for in-place cleanup.
 - Otherwise use `rewrite`.
 
-## Required references
+## References
 
-Read the linked files directly from this skill package:
-
-1. **Always read [PATTERN-CATALOG.md](./pattern-catalog.md)** before auditing.
-   It contains the complete surface-pattern catalog, vocabulary tables, severities, and
-   carve-outs.
-2. **Read [PROFILES.md](./profiles.md)** when selecting or applying a context,
-   voice, or author-sample profile.
-3. **Read [STRUCTURAL-AUDIT.md](../references/STRUCTURAL-AUDIT.md)** only when the user
-   requests a deep or structural pass or selects `--depth structural`.
-
-Do not infer rules from a file name alone. Read the applicable reference before acting.
+1. The **[pattern catalog](./pattern-catalog.md)** defines the surface rules: vocabulary
+   tiers, template and rhetorical patterns, and their carve-outs. Apply it in full on
+   every audit.
+2. **[Context and voice profiles](./profiles.md)** define profile selection, precedence,
+   and the tolerance matrix. Apply them when choosing a context, voice, or author sample.
+3. **[STRUCTURAL-AUDIT.md](../references/STRUCTURAL-AUDIT.md)** is a separate
+   document-level reference. Read it only when the user requests a deep or structural
+   pass or selects `--depth structural`.
 
 ## Audit workflow
 
@@ -180,18 +176,23 @@ unless the user requests one or a high-risk fact changed.
 
 Use severity for editorial risk, not certainty of AI authorship:
 
-- **P0 - credibility or publishing failure:** fabricated/unsupported claims, leaked tool
-  artifacts, broken citations, unresolved placeholders, or material meaning corruption.
-- **P1 - clear reader-facing problem:** repeated boilerplate, misleading significance,
-  unsupported causal certainty, generic attribution, or dense pattern clusters.
-- **P2 - contextual polish:** punctuation preferences, cadence, formatting, isolated
-  vocabulary, and other judgment calls.
+- **P0 - credibility or publishing failure:** unsupported or fabricated claims,
+  speculative gap-filling, leaked tool or citation artifacts, unresolved publishing
+  placeholders, broken citations, or material meaning corruption.
+- **P1 - clear reader-facing problem:** dense vocabulary or boilerplate clusters;
+  significance, novelty, or promotional inflation; vague attribution; unsupported causal
+  certainty; generic future narratives and hedge stacks; formulaic openings or
+  conclusions; chatbot, reasoning, sycophancy, or acknowledgment artifacts; repetitive
+  rhetorical shells that obscure information.
+- **P2 - contextual polish:** isolated word choices; punctuation, formatting, and cadence
+  preferences; occasional transitions or rhetorical questions; heading, list, and
+  paragraph-shape judgments.
 
 For quick passes, prioritize P0 and P1. A full audit includes P2 without forcing edits.
 
 ## Output format
 
-Keep these headings and their order for compatibility.
+Every response uses these exact headings, in this order.
 
 ### Rewrite mode
 

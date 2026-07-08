@@ -1,6 +1,6 @@
 {
   "name": "avoid-ai-writing",
-  "version": "4.0.2",
+  "version": "4.1.0",
   "defaultMode": "rewrite",
   "defaultDepth": "surface",
   "modes": ["rewrite", "detect", "edit"],

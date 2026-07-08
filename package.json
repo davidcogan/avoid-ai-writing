@@ -1,6 +1,6 @@
 {
   "name": "avoid-ai-writing-detector",
-  "version": "4.0.2",
+  "version": "4.1.0",
   "description": "Cursor Agent Skill package and deterministic surface-pattern detector for avoiding AI-writing patterns.",
   "license": "MIT",
   "repository": {

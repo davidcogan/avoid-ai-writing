@@ -1,7 +1,7 @@
 ---
 name: avoid-ai-writing
-description: Cursor Agent Skill that audits and rewrites content to remove AI writing patterns ("AI-isms") while preserving facts, intent, voice, and genre conventions. Use when asked to remove AI-isms, clean up AI writing, audit writing for AI tells, make text sound less like AI, or perform a deeper structural writing audit. Supports detect-only, rewrite, and edit-in-place modes; context and voice profiles; and an optional permissioned structural pass.
-version: 4.0.2
+description: Audits and rewrites content to remove AI writing patterns ("AI-isms") while preserving facts, intent, voice, and genre conventions. Use when asked to humanize AI-sounding text, remove AI-isms, clean up AI slop, make text sound less like AI or ChatGPT, audit writing for AI tells, or run a deeper structural writing audit. Supports detect-only, rewrite, and edit-in-place modes; context and voice profiles; and an optional permissioned structural pass.
+version: 4.1.0
 license: MIT
 metadata:
   author: Conor Bronsdon
@@ -40,8 +40,6 @@ or attribution verdicts.
 
 ## Modes
 
-The public modes and defaults remain:
-
 - **`rewrite`** (default): identify in-scope issues, rewrite the text, summarize meaningful
   changes, and run a corrective second pass.
 - **`detect`**: identify issues without rewriting. Separate clear editorial problems from
@@ -53,6 +51,7 @@ The public modes and defaults remain:
 Natural language is enough:
 
 - "Remove AI-isms from this post."
+- "Humanize this draft."
 - "Rewrite this in a blunt voice for LinkedIn."
 - "Edit `post.md` in place."
 - "Scan this, but do not rewrite it."
@@ -69,12 +68,12 @@ Power-user options:
 --iterate N
 ```
 
-`--depth surface` is the compatibility default. `--depth structural` authorizes analysis
-of document-level organization but not silent global restructuring.
+`--depth surface` is the default. `--depth structural` authorizes analysis of
+document-level organization but not silent global restructuring.
 
-`--iterate N` is capped at 2 for compatibility. The built-in corrective pass counts as the
-second pass. Report `converged in 2 passes` only when no remaining **in-scope** issue is
-found; do not imply that the text is proven human or undetectable.
+`--iterate N` is capped at 2. The built-in corrective pass counts as the second pass.
+Report `converged in 2 passes` only when no remaining **in-scope** issue is found; do not
+imply that the text is proven human or undetectable.
 
 Mode triggers:
 
@@ -82,19 +81,16 @@ Mode triggers:
 - Use `edit` when the writer names a file and asks for in-place cleanup.
 - Otherwise use `rewrite`.
 
-## Required references
+## References
 
-The surface catalog and profiles are embedded later in this runtime file. Apply them in place:
-
-1. **Always read [PATTERN-CATALOG.md](#pattern-catalog)** before auditing.
-   It contains the complete surface-pattern catalog, vocabulary tables, severities, and
-   carve-outs.
-2. **Read [PROFILES.md](#context-and-voice-profiles)** when selecting or applying a context,
-   voice, or author-sample profile.
-3. **Read [STRUCTURAL-AUDIT.md](./references/STRUCTURAL-AUDIT.md)** only when the user
-   requests a deep or structural pass or selects `--depth structural`.
-
-Do not infer rules from a file name alone. Read the applicable reference before acting.
+1. The **[pattern catalog](#pattern-catalog)** defines the surface rules: vocabulary
+   tiers, template and rhetorical patterns, and their carve-outs. Apply it in full on
+   every audit.
+2. **[Context and voice profiles](#context-and-voice-profiles)** define profile selection, precedence,
+   and the tolerance matrix. Apply them when choosing a context, voice, or author sample.
+3. **[STRUCTURAL-AUDIT.md](./references/STRUCTURAL-AUDIT.md)** is a separate
+   document-level reference. Read it only when the user requests a deep or structural
+   pass or selects `--depth structural`.
 
 ## Audit workflow
 
@@ -180,18 +176,23 @@ unless the user requests one or a high-risk fact changed.
 
 Use severity for editorial risk, not certainty of AI authorship:
 
-- **P0 - credibility or publishing failure:** fabricated/unsupported claims, leaked tool
-  artifacts, broken citations, unresolved placeholders, or material meaning corruption.
-- **P1 - clear reader-facing problem:** repeated boilerplate, misleading significance,
-  unsupported causal certainty, generic attribution, or dense pattern clusters.
-- **P2 - contextual polish:** punctuation preferences, cadence, formatting, isolated
-  vocabulary, and other judgment calls.
+- **P0 - credibility or publishing failure:** unsupported or fabricated claims,
+  speculative gap-filling, leaked tool or citation artifacts, unresolved publishing
+  placeholders, broken citations, or material meaning corruption.
+- **P1 - clear reader-facing problem:** dense vocabulary or boilerplate clusters;
+  significance, novelty, or promotional inflation; vague attribution; unsupported causal
+  certainty; generic future narratives and hedge stacks; formulaic openings or
+  conclusions; chatbot, reasoning, sycophancy, or acknowledgment artifacts; repetitive
+  rhetorical shells that obscure information.
+- **P2 - contextual polish:** isolated word choices; punctuation, formatting, and cadence
+  preferences; occasional transitions or rhetorical questions; heading, list, and
+  paragraph-shape judgments.
 
 For quick passes, prioritize P0 and P1. A full audit includes P2 without forcing edits.
 
 ## Output format
 
-Keep these headings and their order for compatibility.
+Every response uses these exact headings, in this order.
 
 ### Rewrite mode
 
@@ -322,113 +323,48 @@ claims.
 ### Tier 1: review every instance
 
 Replace unless the term is exact, conventional for the domain, quoted, or part of the
-writer's established voice.
+writer's established voice. The fix is the plain word or the concrete fact the term
+gestures at, never a fancier synonym.
 
-| Review | Prefer |
-|---|---|
-| delve / delve into | explore, examine, look at |
-| landscape (metaphor) | field, industry, market, setting |
-| tapestry | name the actual combination or complexity |
-| realm | area, field, domain |
-| paradigm | model, approach, framework |
-| embark | start, begin |
-| beacon | state the concrete role |
-| testament to | shows, demonstrates |
-| robust | strong, reliable, fault-tolerant, or the exact technical property |
-| comprehensive | complete, thorough, or name what is included |
-| cutting-edge | latest, advanced, or name the capability |
-| leverage (verb) | use |
-| pivotal | important, critical, or state the consequence |
-| underscores | shows, highlights |
-| meticulous / meticulously | careful, detailed, precise |
-| seamless / seamlessly | smooth, easy, or describe the missing friction |
-| game-changer / game-changing | state what changed and for whom |
-| hit differently / hits different | describe the reaction or cut |
-| utilize | use |
-| watershed moment | turning point, shift, or state what changed |
-| marking a pivotal moment | state what happened |
-| the future looks bright | replace with a specific outlook or cut |
-| only time will tell | replace with a testable uncertainty or cut |
-| nestled | is in, sits in |
-| vibrant | describe the activity |
-| thriving | cite the growth or activity |
-| despite challenges ... continues to thrive | name the challenge and response |
-| showcasing | showing, demonstrating, or cut the clause |
-| deep dive / dive into | examine, review, look at |
-| unpack / unpacking | explain, break down |
-| bustling | busy, active, or cite what is happening |
-| intricate / intricacies | name the relevant complexity |
-| complexities | name the problems or details |
-| ever-evolving | describe how it is changing |
-| enduring | lasting, long-running, or cite the duration |
-| daunting | difficult, costly, or name the obstacle |
-| holistic / holistically | name what is included |
-| actionable | practical, concrete, or state the action |
-| impactful | state the impact |
-| learnings | lessons, findings |
-| thought leader / thought leadership | describe the person's contribution |
-| best practices | standard approach, proven method, or name the practice |
-| at its core | state the claim directly |
-| synergy / synergies | describe the combined effect |
-| interplay | relationship, interaction |
-| in order to | to |
-| due to the fact that | because |
-| serves as | is, acts as |
-| features (inflated verb) | has, includes |
-| boasts | has |
-| presents (inflated) | is, shows, gives |
-| commence | start, begin |
-| ascertain | determine, find out |
-| endeavor | effort, attempt |
-| keen (empty intensifier) | interested, eager, or cut |
-| symphony (metaphor) | describe the coordination |
-| embrace (metaphor) | adopt, accept, use |
+- **Plain-verb swaps**: `delve`, `deep dive`, `dive into`, `unpack` (examine, explain);
+  `utilize`, `leverage` (use); `embark`, `commence` (start); `ascertain` (find out);
+  `endeavor` (attempt); `showcasing` (showing); `underscores` (shows); `in order to`
+  (to); `due to the fact that` (because).
+- **Stock metaphors**: `landscape`, `realm`, `tapestry`, `beacon`, `symphony`,
+  `embrace`, `nestled`, `bustling`. Name the actual field, place, role, or coordination.
+- **Unearned adjectives**: `robust`, `comprehensive`, `cutting-edge`, `pivotal`,
+  `meticulous`, `seamless`, `vibrant`, `thriving`, `intricate`, `ever-evolving`,
+  `enduring`, `daunting`, `holistic`, `actionable`, `impactful`, `keen`. State the
+  specific property, scope, number, or consequence the word stands in for.
+- **Buzz nouns**: `paradigm` (model, approach); `synergy`, `interplay` (describe the
+  combined effect or relationship); `learnings` (lessons, findings); `best practices`
+  (name the practice); `thought leader`, `thought leadership` (describe the
+  contribution); `complexities`, `intricacies` (name them); `game-changer`,
+  `game-changing` (state what changed and for whom).
+- **Canned claims and closers**: `testament to` (shows); `watershed moment`, `marking a
+  pivotal moment` (state what happened); `at its core` (state the claim directly);
+  `hit differently` (describe the reaction); `the future looks bright`, `only time will
+  tell` (replace with a specific, testable outlook or cut); `despite challenges ...
+  continues to thrive` (name the challenge and response).
 
 ### Tier 2: review in clusters
 
 One instance may be natural. Review a paragraph when several appear or when they replace
 plain, accurate verbs.
 
-| Review | Prefer |
-|---|---|
-| harness | use, take advantage of |
-| navigate / navigating | handle, work through |
-| foster | support, encourage, build |
-| elevate | improve, raise |
-| unleash | release, enable |
-| streamline | simplify, speed up |
-| empower | enable, allow |
-| bolster | strengthen, support |
-| spearhead | lead, run |
-| resonate / resonates with | connect with, matter to |
-| revolutionize | describe the change |
-| facilitate / facilitates | enable, help, run |
-| underpin | support, form the basis of |
-| nuanced | name the nuance |
-| crucial | important, necessary |
-| multifaceted | name the facets |
-| ecosystem (metaphor) | system, network, community, market |
-| myriad | many, or give the number |
-| plethora | many, or give the number |
-| encompass | include, cover |
-| catalyze | start, trigger, accelerate |
-| reimagine | rethink, redesign |
-| galvanize | motivate, rally |
-| augment | add to, expand |
-| cultivate | build, develop |
-| illuminate | explain, show |
-| elucidate | explain, clarify |
-| juxtapose | compare, contrast |
-| paradigm-shifting | state what shifted |
-| transformative / transformation | state what changed |
-| cornerstone | foundation, key part |
-| paramount | most important |
-| poised to | ready to, expected to, or state the evidence |
-| burgeoning | growing, emerging, or cite growth |
-| nascent | new, early-stage |
-| quintessential | typical, defining |
-| overarching | main, broad |
-| underpinning / underpinnings | basis, support |
+- **Inflated verbs**: `harness`, `navigate`, `foster`, `elevate`, `unleash`,
+  `streamline`, `empower`, `bolster`, `spearhead`, `facilitate`, `underpin`,
+  `encompass`, `catalyze`, `reimagine`, `galvanize`, `augment`, `cultivate`,
+  `illuminate`, `elucidate`, `juxtapose`. Prefer the ordinary verb the sentence needs:
+  use, handle, support, improve, simplify, enable, lead, include, start, rethink,
+  build, explain, compare.
+- **Asserted importance**: `crucial`, `paramount`, `nuanced`, `multifaceted`,
+  `quintessential`, `overarching`, `transformative`, `paradigm-shifting`,
+  `revolutionize`. Name the nuance, facet, or change instead of asserting it.
+- **Trend and scale dressing**: `ecosystem` (metaphor), `cornerstone`, `underpinning`,
+  `poised to`, `burgeoning`, `nascent`, `resonate with`, `myriad`, `plethora`. Prefer
+  system, foundation, basis, ready to, growing, new, connect with, and many, or give
+  the number and the evidence.
 
 ### Tier 3: review only at high density
 
@@ -535,13 +471,7 @@ Do not keep the claim and merely delete the attribution.
 
 ### Filler and throat-clearing
 
-Cut or rewrite:
-
-- `It is important to note that`;
-- `In terms of`;
-- `The reality is that`;
-- `In order to`;
-- `Due to the fact that`.
+Cut or rewrite `It is important to note that`, `In terms of`, and `The reality is that`.
 
 ### Generic conclusions
 
@@ -758,33 +688,6 @@ legal language, and the simple vocabulary of a writer who chose it.
 Recommend a wording rewrite when local edits would become numerous or inconsistent.
 Recommend a structural proposal when the content-only outline reveals a document-level
 problem. Do not use vocabulary-hit counts as a universal threshold.
-
-## Severity guide
-
-### P0: credibility or publishing failure
-
-- unsupported or fabricated claim;
-- speculative gap-filling that changes the record;
-- leaked tool/citation artifacts;
-- unresolved publishing placeholders;
-- broken citation or factual-preservation failure.
-
-### P1: clear reader-facing problem
-
-- dense vocabulary or boilerplate clusters;
-- significance, novelty, or promotional inflation;
-- vague attribution;
-- generic future narrative or hedge stack;
-- formulaic opening or conclusion;
-- chatbot, reasoning, sycophancy, or acknowledgment artifacts;
-- repetitive rhetorical shells that obscure information.
-
-### P2: contextual polish
-
-- isolated word choices;
-- punctuation and formatting preferences;
-- occasional transition or rhetorical question;
-- rhythm, heading, list, and paragraph-shape judgments.
 
 
 ---
