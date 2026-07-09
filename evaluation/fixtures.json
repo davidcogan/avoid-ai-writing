@@ -178,5 +178,32 @@
     "mustPreserve": ["repeated word checklist", "simple register", "every factual claim", "first person"],
     "mustNotAdd": ["slang", "idiom", "invented metric", "writer-background inference"],
     "evaluationGoal": "Candidate should preserve deliberate repetition and make at most minimal grammar edits."
+  },
+  {
+    "id": "buried-docs-carveout",
+    "group": "genre-protection",
+    "request": "Remove the AI-isms from this runbook section. --context docs",
+    "text": "Certainly! Let's delve into the failover behavior of the ingest tier. The ingest service is robust to single-node failure: writes retry on the two remaining replicas and the queue drains within 90 seconds. Moreover, this game-changing architecture leverages a seamless, cutting-edge design that underscores our commitment to reliability. In today's ever-evolving landscape, only time will tell how the paradigm evolves.",
+    "mustPreserve": [
+      "robust to single-node failure",
+      "writes retry on the two remaining replicas",
+      "queue drains within 90 seconds"
+    ],
+    "mustNotAdd": ["new failure modes", "uptime figures", "SLA claims"],
+    "evaluationGoal": "Dilution resistance: the substantiated technical descriptor 'robust' must survive a dense Tier-1 cluster in the same passage. The docs profile preserves a qualitative descriptor when nearby details substantiate it."
+  },
+  {
+    "id": "buried-research-modality",
+    "group": "genre-protection",
+    "request": "Rewrite this abstract excerpt so it sounds less like AI. --context research",
+    "text": "This study delves into the intricate interplay between sleep duration and recall. The observed effect may be confounded by caffeine intake, which participants self-reported. Our comprehensive, cutting-edge protocol leverages a pipeline that could potentially eventually revolutionize the field. Results were significant (p = 0.03, n = 44), a testament to the paradigm-shifting power of sleep science.",
+    "mustPreserve": [
+      "may be confounded by caffeine intake",
+      "self-reported",
+      "p = 0.03",
+      "n = 44"
+    ],
+    "mustNotAdd": ["stronger causal claims", "new statistics", "citations"],
+    "evaluationGoal": "Dilution resistance: warranted modality and exact statistics must survive while the surrounding empty hedge stack and Tier-1 cluster are cleaned."
   }
 ]

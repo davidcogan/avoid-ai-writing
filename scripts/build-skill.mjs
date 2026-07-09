@@ -22,11 +22,7 @@ function runtimeLinks(markdown) {
   return markdown
     .replaceAll('./pattern-catalog.md', '#pattern-catalog')
     .replaceAll('./profiles.md', '#context-and-voice-profiles')
-    .replaceAll('../references/STRUCTURAL-AUDIT.md', './references/STRUCTURAL-AUDIT.md')
-    .replace(
-      'Read the linked files directly from this skill package:',
-      'The surface catalog and profiles are embedded later in this runtime file. Apply them in place:'
-    );
+    .replaceAll('../references/STRUCTURAL-AUDIT.md', './references/STRUCTURAL-AUDIT.md');
 }
 
 const skill = read('src/skill-router.md');

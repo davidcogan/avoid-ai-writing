@@ -13,7 +13,7 @@ The patterns are editing signals, not proof of authorship. Human writers use the
 Install once to use the skill across Cursor projects:
 
 ```bash
-VERSION=v4.0.2
+VERSION=v4.1.0
 mkdir -p ~/.cursor/skills/avoid-ai-writing/references
 
 curl -fsSL \
@@ -31,7 +31,7 @@ Pin the skill in a repository when everyone working there should use the same ve
 these commands from the repository root:
 
 ```bash
-VERSION=v4.0.2
+VERSION=v4.1.0
 mkdir -p .cursor/skills/avoid-ai-writing/references
 
 curl -fsSL \
@@ -54,7 +54,7 @@ Which version of avoid-ai-writing is loaded? Run it in detect mode on:
 "Certainly! The future looks bright!"
 ```
 
-The response should report version `4.0.2`, then flag the chatbot opener and generic
+The response should report version `4.1.0`, then flag the chatbot opener and generic
 conclusion without rewriting the text.
 
 ## Use
@@ -63,6 +63,7 @@ Example requests:
 
 ```text
 Remove the AI-isms from this post.
+Humanize this draft.
 Make this sound less like AI.
 Audit this draft, but do not rewrite it.
 Edit README.md in place.

@@ -4,6 +4,22 @@ All notable changes to this project are documented here.
 
 ---
 
+## [4.1.0] — 2026-07-08
+
+### Changed
+- Rewrote the frontmatter description with humanize-family triggers ("humanize", "AI slop", "sounds like ChatGPT") and removed the redundant self-description.
+- Merged the duplicated severity definitions into a single `## Severity` policy in the router; removed the catalog's `## Severity guide`.
+- Replaced the multi-file "Required references" instructions with a `## References` section whose wording is accurate in both the source and the embedded runtime.
+- Compressed the Tier 1 and Tier 2 vocabulary tables into grouped lists. Every term is retained; only non-obvious replacements keep explicit suggestions.
+- Moved `serves as`, `features`, `boasts`, and `presents` to their canonical home under Copula avoidance, and removed filler entries duplicated by Tier 1.
+- Removed maintainer-facing compatibility language from runtime instructions.
+
+### Added
+- "Humanize this draft." as a documented natural-language trigger.
+- Two adversarial dilution fixtures (`buried-docs-carveout`, `buried-research-modality`) that bury must-survive carve-outs in dense Tier-1 bait, so future size or wording changes have a sensitive regression check for rule dilution.
+
+---
+
 ## [4.0.2] — 2026-07-01
 
 ### Changed
